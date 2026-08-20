@@ -1,9 +1,15 @@
 export const SECTIONS = [
-  { id: "about", label: "Genesis" },
+  { id: "neural", label: "Genesis" },
+  { id: "about", label: "About" },
   { id: "themes", label: "Themes" },
+  { id: "process", label: "Process" },
   { id: "schedule", label: "Schedule" },
+  { id: "benefits", label: "Benefits" },
   { id: "rules", label: "Rules" },
   { id: "previous", label: "Legacy" },
-  { id: "winners", label: "Winners" },
-  { id: "cta", label: "Join" },
+  { id: "winners", label: "Prizes" },
+  { id: "gallery", label: "Gallery" },
+  { id: "faq", label: "FAQ" },
+  { id: "sponsors", label: "Sponsors" },
+  { id: "contact", label: "Contact" },
 ];

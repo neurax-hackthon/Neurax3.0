@@ -5,7 +5,7 @@ export default function Rules() {
   return (
     <section id="rules" className="relative py-28 md:py-36 px-6 bg-void overflow-hidden">
       <div className="relative max-w-5xl mx-auto">
-        <SectionHeading eyebrow="THE PROTOCOL" title="Rules" />
+        <SectionHeading eyebrow="THE PROTOCOL" title="Rules & Regulations" />
 
         <div className="grid md:grid-cols-3 gap-10 md:gap-8">
           {RULES.map((group, i) => (

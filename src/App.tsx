@@ -5,11 +5,17 @@ import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
 import LiveTimer from "./components/LiveTimer";
 import NeuralNetworkSection from "./components/NeuralNetworkSection";
+import AboutNeurax from "./components/AboutNeurax";
 import ThemeNetwork from "./components/ThemeNetwork";
+import Process from "./components/Process";
 import ScheduleTimeline from "./components/ScheduleTimeline";
+import Benefits from "./components/Benefits";
 import Rules from "./components/Rules";
 import PreviousHackathons from "./components/PreviousHackathons";
 import Winners from "./components/Winners";
+import Gallery from "./components/Gallery";
+import FAQSupport from "./components/FAQSupport";
+import SponsorsPartners from "./components/SponsorsPartners";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import AdminPanel from "./components/AdminPanel";
@@ -33,13 +39,19 @@ function App() {
       <ScrollProgress />
 
       <main>
-        <LiveTimer />
         <NeuralNetworkSection />
+        <LiveTimer />
+        <AboutNeurax />
         <ThemeNetwork />
+        <Process />
         <ScheduleTimeline />
+        <Benefits />
         <Rules />
         <PreviousHackathons />
         <Winners />
+        <Gallery />
+        <FAQSupport />
+        <SponsorsPartners />
         <FinalCTA />
       </main>
 

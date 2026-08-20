@@ -215,5 +215,59 @@ export const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#themes", label: "Themes" },
   { href: "#schedule", label: "Schedule" },
-  { href: "#winners", label: "Winners" },
+  { href: "#winners", label: "Prizes" },
+];
+
+// ─── Process ────────────────────────────────────────────────────────────────
+// A condensed, milestone-level view of the same 24 hours detailed minute-by-
+// minute in SCHEDULE below — the stage names here are pulled straight from
+// SCHEDULE's items rather than re-authored, so the two sections stay in sync.
+export type ProcessStage = {
+  step: string;
+  title: string;
+  description: string;
+};
+
+export const PROCESS: ProcessStage[] = [
+  {
+    step: "01",
+    title: "Team Formation",
+    description: "Form or join a team right after the opening ceremony and problem statement reveal.",
+  },
+  {
+    step: "02",
+    title: "Build",
+    description: "24 hours of building, with mentoring sessions and a technical workshop along the way.",
+  },
+  {
+    step: "03",
+    title: "Submission",
+    description: "Lock in your final submission once the submission window opens.",
+  },
+  {
+    step: "04",
+    title: "Evaluation",
+    description: "Each team presents a live demo; judges score on innovation, technical depth, execution, and impact.",
+  },
+  {
+    step: "05",
+    title: "Results",
+    description: "Winners are announced at the closing ceremony.",
+  },
+];
+
+// ─── Benefits ───────────────────────────────────────────────────────────────
+export type Benefit = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export const BENEFITS: Benefit[] = [
+  { icon: "\u{1F91D}", title: "Networking", description: "Meet fellow builders, mentors, and organizers from across the ecosystem." },
+  { icon: "\u{1F393}", title: "Learning", description: "Pick up new tools and techniques through hands-on building and the technical workshop." },
+  { icon: "\u{1F9ED}", title: "Mentorship", description: "Get guidance from mentors during dedicated mentoring sessions." },
+  { icon: "\u{1F517}", title: "Collaboration", description: "Team up across disciplines to take a project from idea to demo." },
+  { icon: "\u{1F680}", title: "Exposure", description: "Present your work to judges and the wider NeurAX community." },
+  { icon: "\u{1F3C6}", title: "Recognition", description: "Top projects are recognized at the closing ceremony." },
 ];

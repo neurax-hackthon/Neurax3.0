@@ -160,7 +160,7 @@ export default function NeuralNetworkSection() {
   return (
     <div
       ref={outerRef}
-      id="about"
+      id="neural"
       className="relative"
       style={{ height: `${SCROLL_DISTANCE_VH}vh` }}
     >

@@ -7,7 +7,7 @@ export default function ScheduleTimeline() {
       <div className="relative max-w-5xl mx-auto">
         <SectionHeading
           eyebrow="THE PATHWAY"
-          title="Schedule"
+          title="24-Hour Schedule"
           subtitle="Two days. One continuous signal from spark to showcase."
         />
 

@@ -27,9 +27,9 @@ export default function Winners() {
     <section id="winners" className="relative py-28 md:py-36 px-6 bg-void overflow-hidden">
       <div className="relative max-w-5xl mx-auto">
         <SectionHeading
-          eyebrow="THE OUTPUT"
-          title="The Minds Behind the Network"
-          subtitle="Three teams. One winning signal each."
+          eyebrow="THE REWARD"
+          title="Prize Pool & Swags"
+          subtitle="Podium places from the network — exact prize amounts and swag details to be announced."
         />
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-6">

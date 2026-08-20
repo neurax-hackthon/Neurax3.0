@@ -45,6 +45,14 @@ export default function Navigation() {
           })}
         </ul>
 
+        <a
+          href="#register"
+          onClick={(e) => e.preventDefault()}
+          className="hidden md:inline-flex label-caps text-[10px] px-4 py-2 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"
+        >
+          Register Now
+        </a>
+
         <button
           type="button"
           aria-label="Toggle menu"
@@ -67,6 +75,13 @@ export default function Navigation() {
               {link.label}
             </button>
           ))}
+          <a
+            href="#register"
+            onClick={(e) => e.preventDefault()}
+            className="label-caps text-xs px-5 py-3 rounded-full bg-gold-bright text-void font-semibold text-center"
+          >
+            Register Now
+          </a>
         </div>
       )}
     </nav>
