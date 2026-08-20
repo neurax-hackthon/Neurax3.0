@@ -26,8 +26,9 @@ export default function FinalCTA() {
 
         <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
           <a
-            href="#register"
-            onClick={(e) => e.preventDefault()}
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfELUvKrZS2koDgq92jZzjzFqanV5jiS5AjghIE2gXNMFVygA/viewform?usp=send_form"
+            target="_blank"
+            rel="noreferrer"
             className="label-caps text-xs px-8 py-4 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"
           >
             Register Now

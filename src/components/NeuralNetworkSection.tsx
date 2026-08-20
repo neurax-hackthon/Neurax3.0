@@ -91,7 +91,11 @@ export default function NeuralNetworkSection() {
   const durationRef = useRef(0);
   const pendingRef = useRef(0);
   const seekingRef = useRef(false);
+  const rafIdRef = useRef(0);
   const { ref: lazyRef, hasBeenInView } = useInView<HTMLDivElement>({ rootMargin: "400px" });
+
+  // Detect mobile once on mount — used to gate expensive effects
+  const isMobileRef = useRef(typeof window !== "undefined" && window.innerWidth <= 768);
 
   // Seeking a video is async (decode to nearest keyframe). Chase only the
   // latest target instead of queuing every scroll-tick seek, or fast
@@ -130,40 +134,62 @@ export default function NeuralNetworkSection() {
       fadeOutEnd: NODE_2_FADE_OUT_END,
     };
 
+    const isMobile = isMobileRef.current;
+
     const st = ScrollTrigger.create({
       trigger: outerRef.current,
       start: "top top",
       end: "bottom bottom",
       pin: pinnedRef.current,
-      // Kept low and paired with the short-GOP video above so the camera
-      // tracks the scrollbar directly instead of visibly catching up.
-      scrub: 0.15,
+      // On mobile use higher scrub smoothing to reduce onUpdate frequency
+      // and give the browser breathing room between seek calls.
+      scrub: isMobile ? 0.6 : 0.15,
       onUpdate: (self) => {
         const progress = self.progress;
 
-        // Drive the camera: scroll position maps directly to the clip's
-        // playhead, same seek-chasing approach as the CinematicReel.
-        const video = videoRef.current;
-        const duration = durationRef.current;
-        if (video && video.dataset.armed === "true" && duration > 0 && video.readyState >= 1) {
-          pendingRef.current = progress * duration;
-          if (!seekingRef.current) trySeek();
+        // On mobile, batch all DOM writes into a single rAF to avoid
+        // layout thrashing. On desktop keep the tight 0.15 scrub loop.
+        if (isMobile) {
+          cancelAnimationFrame(rafIdRef.current);
+          rafIdRef.current = requestAnimationFrame(() => {
+            driveFrame(progress, node1Window, node2Window);
+          });
+        } else {
+          driveFrame(progress, node1Window, node2Window);
         }
-
-        applyPhotoTransform(photo1Ref.current, photoVisibility(progress, node1Window));
-        applyPhotoTransform(photo2Ref.current, photoVisibility(progress, node2Window));
       },
     });
 
-    return () => st.kill();
+    return () => {
+      cancelAnimationFrame(rafIdRef.current);
+      st.kill();
+    };
   }, []);
+
+  function driveFrame(progress: number, n1: PhotoWindow, n2: PhotoWindow) {
+    // Drive the camera: scroll position maps directly to the clip's
+    // playhead, same seek-chasing approach as the CinematicReel.
+    const video = videoRef.current;
+    const duration = durationRef.current;
+    if (video && video.dataset.armed === "true" && duration > 0 && video.readyState >= 1) {
+      pendingRef.current = progress * duration;
+      if (!seekingRef.current) trySeek();
+    }
+
+    applyPhotoTransform(photo1Ref.current, photoVisibility(progress, n1), isMobileRef.current);
+    applyPhotoTransform(photo2Ref.current, photoVisibility(progress, n2), isMobileRef.current);
+  }
+
+  // Use shorter scroll distance on mobile — 480vh is unnecessarily long for
+  // a small screen and forces far too many seek calls per gesture.
+  const scrollVh = isMobileRef.current ? 280 : SCROLL_DISTANCE_VH;
 
   return (
     <div
       ref={outerRef}
       id="neural"
       className="relative"
-      style={{ height: `${SCROLL_DISTANCE_VH}vh` }}
+      style={{ height: `${scrollVh}vh` }}
     >
       <div ref={lazyRef} className="absolute inset-0 pointer-events-none" aria-hidden />
 
@@ -184,7 +210,7 @@ export default function NeuralNetworkSection() {
             seekingRef.current = false;
             trySeek();
           }}
-          className="absolute inset-0 z-[1] h-full w-full object-cover"
+          className="absolute inset-0 z-[1] h-full w-full object-cover will-change-transform"
         />
 
         <div className="vignette z-[2]" />
@@ -208,7 +234,7 @@ export default function NeuralNetworkSection() {
   );
 }
 
-function applyPhotoTransform(el: HTMLDivElement | null, visibility: number) {
+function applyPhotoTransform(el: HTMLDivElement | null, visibility: number, isMobile: boolean) {
   if (!el) return;
   const v = Math.min(1, Math.max(0, visibility));
 
@@ -217,19 +243,28 @@ function applyPhotoTransform(el: HTMLDivElement | null, visibility: number) {
   const scale = 0.7 + v * 0.3;
   const driftPx = (1 - v) * 18;
 
-  // A short-lived bloom that peaks mid-transition (v=0.5) and settles back
-  // to nothing once fully shown/hidden - a soft flash as the photo
-  // materializes out of the node's light, and dissolves back into it.
-  const transitionPulse = v * (1 - v) * 4;
-  const blurPx = (1 - v) * 10;
-  const brightness = 1 + transitionPulse * 0.5;
-  const glowRadius = 10 + transitionPulse * 26;
-  const glowAlpha = 0.3 + transitionPulse * 0.45;
-
   el.style.opacity = String(v);
   el.style.transform = `translate(-50%, calc(-50% + ${driftPx}px)) scale(${scale})`;
-  el.style.filter = `blur(${blurPx}px) brightness(${brightness}) drop-shadow(0 0 ${glowRadius}px rgba(233,201,138,${glowAlpha}))`;
   el.style.pointerEvents = v > 0.05 ? "auto" : "none";
+
+  // On mobile, skip expensive per-frame filter recompositing entirely.
+  // The isMobile flag is read from a ref (set once on mount) instead of
+  // querying window.innerWidth every tick, which avoids layout thrashing.
+  if (!isMobile) {
+    // A short-lived bloom that peaks mid-transition (v=0.5) and settles back
+    // to nothing once fully shown/hidden - a soft flash as the photo
+    // materializes out of the node's light, and dissolves back into it.
+    const transitionPulse = v * (1 - v) * 4;
+    const blurPx = (1 - v) * 10;
+    const brightness = 1 + transitionPulse * 0.5;
+    const glowRadius = 10 + transitionPulse * 26;
+    const glowAlpha = 0.3 + transitionPulse * 0.45;
+
+    el.style.filter = `blur(${blurPx}px) brightness(${brightness}) drop-shadow(0 0 ${glowRadius}px rgba(233,201,138,${glowAlpha}))`;
+  } else {
+    // Simple fade — no blur, no drop-shadow, no brightness animation
+    el.style.filter = "none";
+  }
 }
 
 const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow: string; title: string }>(

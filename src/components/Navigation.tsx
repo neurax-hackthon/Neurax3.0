@@ -46,8 +46,9 @@ export default function Navigation() {
         </ul>
 
         <a
-          href="#register"
-          onClick={(e) => e.preventDefault()}
+          href="https://docs.google.com/forms/d/e/1FAIpQLSfELUvKrZS2koDgq92jZzjzFqanV5jiS5AjghIE2gXNMFVygA/viewform?usp=send_form"
+          target="_blank"
+          rel="noreferrer"
           className="hidden md:inline-flex label-caps text-[10px] px-4 py-2 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"
         >
           Register Now
@@ -76,8 +77,9 @@ export default function Navigation() {
             </button>
           ))}
           <a
-            href="#register"
-            onClick={(e) => e.preventDefault()}
+            href="https://docs.google.com/forms/d/e/1FAIpQLSfELUvKrZS2koDgq92jZzjzFqanV5jiS5AjghIE2gXNMFVygA/viewform?usp=send_form"
+            target="_blank"
+            rel="noreferrer"
             className="label-caps text-xs px-5 py-3 rounded-full bg-gold-bright text-void font-semibold text-center"
           >
             Register Now
