@@ -1,5 +1,10 @@
-import { WINNERS } from "../data/hackathon";
 import SectionHeading from "./SectionHeading";
+
+const PRIZES = [
+  { place: "1st Place", rank: 1, amount: "₹10,000" },
+  { place: "2nd Place", rank: 2, amount: "₹5,000" },
+  { place: "3rd Place", rank: 3, amount: "₹3,000" },
+];
 
 const RING: Record<number, string> = {
   1: "border-gold-bright shadow-[0_0_30px_rgba(233,201,138,0.55)]",
@@ -7,18 +12,15 @@ const RING: Record<number, string> = {
   3: "border-gold-dim shadow-[0_0_12px_rgba(138,115,70,0.25)]",
 };
 
-function initials(team: string) {
-  return team
-    .split(" ")
-    .map((w) => w[0])
-    .join("")
-    .slice(0, 2)
-    .toUpperCase();
-}
+const ICON: Record<number, string> = {
+  1: "🥇",
+  2: "🥈",
+  3: "🥉",
+};
 
 export default function Winners() {
-  const ordered = [...WINNERS].sort((a, b) => {
-    // visually center 1st place: order as [2nd, 1st, 3rd]
+  // visually center 1st place: order as [2nd, 1st, 3rd]
+  const ordered = [...PRIZES].sort((a, b) => {
     const order: Record<number, number> = { 2: 0, 1: 1, 3: 2 };
     return order[a.rank] - order[b.rank];
   });
@@ -32,31 +34,33 @@ export default function Winners() {
           subtitle="Top teams take home cash prizes — build something extraordinary."
         />
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-6">
-          {ordered.map((winner) => {
-            const isFirst = winner.rank === 1;
+        <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-8">
+          {ordered.map((prize) => {
+            const isFirst = prize.rank === 1;
             return (
               <div
-                key={winner.team}
+                key={prize.rank}
                 className={`flex flex-col items-center text-center ${isFirst ? "md:-translate-y-6" : ""}`}
               >
                 <div
-                  className={`relative rounded-full border-2 flex items-center justify-center font-display text-bone ${RING[winner.rank]} ${
-                    isFirst ? "h-32 w-32 md:h-40 md:w-40 text-3xl md:text-4xl" : "h-24 w-24 md:h-28 md:w-28 text-xl md:text-2xl"
+                  className={`relative rounded-full border-2 flex items-center justify-center ${RING[prize.rank]} ${
+                    isFirst ? "h-36 w-36 md:h-44 md:w-44 text-5xl" : "h-28 w-28 md:h-32 md:w-32 text-4xl"
                   } bg-charcoal`}
                 >
-                  {initials(winner.team)}
-                  <span className="absolute -bottom-2 label-caps text-[9px] px-2 py-0.5 rounded-full bg-void border border-line text-gold-bright">
-                    {winner.place}
-                  </span>
+                  {ICON[prize.rank]}
                 </div>
-                <p className="font-display text-2xl md:text-3xl text-gold-bright mt-5 font-medium">{winner.prize}</p>
-                <h3 className="font-display text-xl md:text-2xl text-bone mt-2">{winner.team}</h3>
-                <p className="text-mist text-sm mt-1 max-w-[220px]">{winner.project}</p>
+                <p className={`font-display font-medium text-gold-bright mt-5 ${isFirst ? "text-3xl md:text-4xl" : "text-2xl md:text-3xl"}`}>
+                  {prize.amount}
+                </p>
+                <span className="label-caps text-[11px] text-mist mt-2">{prize.place}</span>
               </div>
             );
           })}
         </div>
+
+        <p className="text-center text-mist text-xs mt-14">
+          Total prize pool worth ₹18,000+ · Additional swags for all participants
+        </p>
       </div>
     </section>
   );
