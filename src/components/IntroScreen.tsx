@@ -33,9 +33,8 @@ export default function IntroScreen({ onEnter }: Props) {
   return (
     <div
       onClick={handleEnter}
-      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-void cursor-pointer select-none overflow-hidden transition-opacity ease-in-out ${
-        exiting ? "opacity-0 pointer-events-none" : "opacity-100"
-      }`}
+      className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-void cursor-pointer select-none overflow-hidden transition-opacity ease-in-out ${exiting ? "opacity-0 pointer-events-none" : "opacity-100"
+        }`}
       style={{ transitionDuration: `${EXIT_MS}ms` }}
     >
       <div className="absolute inset-0 opacity-40">
@@ -49,7 +48,7 @@ export default function IntroScreen({ onEnter }: Props) {
           className="intro-reveal opacity-0 animate-fade-in label-caps text-xs md:text-sm text-cyan mb-6"
           style={{ animationDelay: `${REVEAL_DELAYS[0]}s` }}
         >
-          A COMPETITIVE HACKATHON EXPERIENCE
+          WHERE IDEAS GO NEURAL
         </span>
 
         <h1
