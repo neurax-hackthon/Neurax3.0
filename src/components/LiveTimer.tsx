@@ -10,10 +10,10 @@ export default function LiveTimer() {
   const { launched, launchTime, customMessage } = useHackathonState();
   const countdown = useLaunchCountdown(launchTime);
 
-  // This section mounts/unmounts above the pinned CinematicReel scroll
-  // animation, which shifts every trigger position below it. Without a
-  // refresh here, the reel's pin would start at a stale scroll offset and
-  // visually overlap this banner instead of picking up right after it.
+  // This section mounts/unmounts above the pinned NeuralNetworkSection
+  // scroll animation, which shifts every trigger position below it.
+  // Without a refresh here, that pin would start at a stale scroll offset
+  // and visually overlap this banner instead of picking up right after it.
   useEffect(() => {
     const id = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(id);

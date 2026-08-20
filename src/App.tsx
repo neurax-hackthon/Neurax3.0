@@ -4,7 +4,7 @@ import IntroScreen from "./components/IntroScreen";
 import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
 import LiveTimer from "./components/LiveTimer";
-import CinematicReel from "./components/CinematicReel";
+import NeuralNetworkSection from "./components/NeuralNetworkSection";
 import ThemeNetwork from "./components/ThemeNetwork";
 import ScheduleTimeline from "./components/ScheduleTimeline";
 import Rules from "./components/Rules";
@@ -34,9 +34,7 @@ function App() {
 
       <main>
         <LiveTimer />
-        <section id="about">
-          <CinematicReel />
-        </section>
+        <NeuralNetworkSection />
         <ThemeNetwork />
         <ScheduleTimeline />
         <Rules />
