@@ -2,11 +2,12 @@ import { useState } from "react";
 import { PREVIOUS_HACKATHONS } from "../data/hackathon";
 import SectionHeading from "./SectionHeading";
 
-// Only the two historical photos that already exist in the project are
-// used here — add more images to public/images and this array to grow
-// the gallery.
+// The historical photos that exist in the project — add more images to
+// public/images and this array to grow the gallery.
 const GALLERY_IMAGES = [
+  { src: "/images/neurax-1.0.jpg", edition: PREVIOUS_HACKATHONS[0] },
   { src: "/images/neurax-history1.jpeg", edition: PREVIOUS_HACKATHONS[0] },
+  { src: "/images/neurax-2.0.jpg", edition: PREVIOUS_HACKATHONS[1] },
   { src: "/images/neurax-history-2.jpeg", edition: PREVIOUS_HACKATHONS[1] },
 ];
 

@@ -27,8 +27,8 @@ import { useInView } from "../hooks/useInView";
 const VIDEO_SRC = "/videos/neurax-network-scrub.mp4";
 
 // Historical photos, revealed inside the empty glowing node centers.
-const PHOTO_1_SRC = "/images/neurax-history1.jpeg";
-const PHOTO_2_SRC = "/images/neurax-history-2.jpeg";
+const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
+const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
 const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2024", title: "NEURAX 1.0" };
 const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2025", title: "NEURAX 2.0" };
 
@@ -60,8 +60,9 @@ const NODE_2_HOLD_END = 0.79;
 const NODE_2_FADE_OUT_END = 0.87;
 
 // Total scroll distance the pinned section consumes, in viewport heights.
-// Kept short on purpose - this is one cinematic beat, not a long scroll.
-const SCROLL_DISTANCE_VH = 130;
+// Deliberately long: the camera journey should read as a few unhurried
+// scroll gestures, not resolve in a single flick of the wheel.
+const SCROLL_DISTANCE_VH = 320;
 
 /* ==========================================================================*/
 

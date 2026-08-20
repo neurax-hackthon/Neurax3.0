@@ -21,7 +21,7 @@ export default function ThemeNetwork() {
   }
 
   return (
-    <section id="themes" className="relative py-28 md:py-36 px-6 bg-void overflow-hidden">
+    <section id="themes" className="relative py-20 md:py-28 px-6 bg-void overflow-hidden">
       <div className="relative max-w-5xl mx-auto">
         <SectionHeading
           eyebrow="THE CIRCUITRY"
@@ -29,7 +29,7 @@ export default function ThemeNetwork() {
           subtitle="Three tracks, one network. Hover a node to trace its connections, tap to open a track."
         />
 
-        <div className="flex justify-center -mt-6 mb-10">
+        <div className="flex justify-center -mt-6 mb-8">
           <span
             className={`label-caps text-[10px] flex items-center gap-2 rounded-full border px-4 py-2 ${
               problemStatementsVisible
@@ -41,7 +41,7 @@ export default function ThemeNetwork() {
           </span>
         </div>
 
-        <div className="relative w-full aspect-square max-w-2xl mx-auto min-h-[420px] md:min-h-[560px]">
+        <div className="relative w-full aspect-square max-w-md mx-auto min-h-[260px] md:min-h-[340px]">
           <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible">
             {THEME_CONNECTIONS.map(([a, b], i) => {
               const from = byId[a];
@@ -97,7 +97,7 @@ export default function ThemeNetwork() {
           })}
         </div>
 
-        <div className="mt-10 h-16 flex items-center justify-center text-center px-4">
+        <div className="mt-6 h-14 flex items-center justify-center text-center px-4">
           {activeTheme ? (
             <p className="text-bone text-sm md:text-base max-w-md animate-fade-in">
               <span className="text-gold-bright font-medium">{activeTheme.label}.</span>{" "}
