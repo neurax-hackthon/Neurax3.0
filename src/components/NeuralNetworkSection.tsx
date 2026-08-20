@@ -29,8 +29,8 @@ const VIDEO_SRC = "/videos/neurax-network-crisp.mp4";
 // Historical photos, revealed inside the empty glowing node centers.
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
-const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2024", title: "NeuraX 1.0" };
-const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2025", title: "NeuraX 2.0" };
+const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2025", title: "NeuraX 1.0" };
+const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2026", title: "NeuraX 2.0" };
 
 // Measured by extracting reference frames from the actual exported clip
 // (10.01s @ 1280x720) and pixel-sampling the hollow ring: both nodes land
