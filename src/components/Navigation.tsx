@@ -21,7 +21,7 @@ export default function Navigation() {
             e.preventDefault();
             scrollToTarget(0);
           }}
-          className="font-display text-lg tracking-wide text-bone"
+          className="font-display text-2xl tracking-wide text-bone"
         >
           NEURA<span className="text-gold-bright">X</span>
         </a>

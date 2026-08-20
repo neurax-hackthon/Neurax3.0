@@ -1,6 +1,5 @@
 import { EVENT } from "../data/hackathon";
 import NeuralBackdrop from "./NeuralBackdrop";
-import { scrollToTarget } from "../lib/gsap";
 
 export default function FinalCTA() {
   return (
@@ -9,22 +8,50 @@ export default function FinalCTA() {
       <div className="absolute left-1/2 top-1/2 h-[70vmax] w-[70vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/5 blur-3xl" />
 
       <div className="relative z-10 flex flex-col items-center text-center max-w-2xl">
-        <span className="label-caps text-xs md:text-sm text-cyan mb-6">CONTACT US · THE NETWORK IS COMPLETE</span>
+        <span className="label-caps text-xs md:text-sm text-cyan mb-6">NEED HELP? · WE'RE HERE FOR YOU</span>
 
         <h2 className="font-display text-5xl sm:text-6xl md:text-7xl font-medium text-bone leading-none">
-          NEURA<span className="text-gold-bright">X</span>
+          Get In Touch
         </h2>
-        <p className="label-caps text-sm md:text-base text-gold mt-3 tracking-[0.5em]">{EVENT.edition}</p>
-
-        <p className="font-display text-2xl md:text-3xl text-bone mt-10 tracking-wide">
-          BUILD. CONNECT. INNOVATE.
+        <p className="text-mist text-sm md:text-base mt-4 max-w-md leading-relaxed">
+          Have questions about registration, themes, or logistics? Reach out — our team is ready to help.
         </p>
 
-        <p className="text-mist text-xs mt-8">
+        <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-lg">
+          {/* Phone */}
+          <a
+            href="tel:+917995760212"
+            className="flex items-center gap-4 rounded-2xl border border-line bg-charcoal/60 hover:border-gold-dim transition-colors duration-300 px-6 py-5"
+          >
+            <span className="flex items-center justify-center h-10 w-10 rounded-full bg-gold-bright/10 text-gold-bright text-lg shrink-0">
+              📞
+            </span>
+            <div className="text-left">
+              <p className="label-caps text-[10px] text-mist">Phone</p>
+              <p className="text-bone text-sm mt-0.5">+91 7995760212</p>
+            </div>
+          </a>
+
+          {/* Email */}
+          <a
+            href="mailto:neurax@cmrtc.ac.in"
+            className="flex items-center gap-4 rounded-2xl border border-line bg-charcoal/60 hover:border-gold-dim transition-colors duration-300 px-6 py-5"
+          >
+            <span className="flex items-center justify-center h-10 w-10 rounded-full bg-cyan/10 text-cyan text-lg shrink-0">
+              ✉️
+            </span>
+            <div className="text-left">
+              <p className="label-caps text-[10px] text-mist">Email</p>
+              <p className="text-bone text-sm mt-0.5">neurax@cmrtc.ac.in</p>
+            </div>
+          </a>
+        </div>
+
+        <p className="text-mist text-xs mt-10">
           {EVENT.dateLabel} &middot; {EVENT.venue}
         </p>
 
-        <div className="mt-10 flex flex-col sm:flex-row items-center gap-4">
+        <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
           <a
             href="https://docs.google.com/forms/d/e/1FAIpQLSfELUvKrZS2koDgq92jZzjzFqanV5jiS5AjghIE2gXNMFVygA/viewform?usp=send_form"
             target="_blank"
@@ -33,13 +60,6 @@ export default function FinalCTA() {
           >
             Register Now
           </a>
-          <button
-            type="button"
-            onClick={() => scrollToTarget("#themes")}
-            className="label-caps text-xs px-8 py-4 rounded-full border border-line text-mist hover:text-bone hover:border-gold-dim transition-colors"
-          >
-            Explore Themes
-          </button>
         </div>
       </div>
     </section>

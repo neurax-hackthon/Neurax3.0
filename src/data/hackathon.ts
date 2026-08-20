@@ -199,12 +199,13 @@ export type Winner = {
   rank: number;
   team: string;
   project: string;
+  prize: string;
 };
 
 export const WINNERS: Winner[] = [
-  { place: "1st Place", rank: 1, team: "Team Synapse", project: "NeuroRoute — adaptive emergency dispatch" },
-  { place: "2nd Place", rank: 2, team: "Team NeuralX", project: "Cortex Grid — predictive energy balancing" },
-  { place: "3rd Place", rank: 3, team: "Team Cortex", project: "SignalAid — assistive communication interface" },
+  { place: "1st Place", rank: 1, team: "Team Synapse", project: "NeuroRoute — adaptive emergency dispatch", prize: "₹10,000" },
+  { place: "2nd Place", rank: 2, team: "Team NeuralX", project: "Cortex Grid — predictive energy balancing", prize: "₹5,000" },
+  { place: "3rd Place", rank: 3, team: "Team Cortex", project: "SignalAid — assistive communication interface", prize: "₹3,000" },
 ];
 
 export const NAV_LINKS = [

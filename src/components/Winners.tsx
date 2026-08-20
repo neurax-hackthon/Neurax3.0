@@ -28,8 +28,8 @@ export default function Winners() {
       <div className="relative max-w-5xl mx-auto">
         <SectionHeading
           eyebrow="THE REWARD"
-          title="Prize Pool & Swags"
-          subtitle="Podium places from the network — exact prize amounts and swag details to be announced."
+          title="Prize Pool"
+          subtitle="Top teams take home cash prizes — build something extraordinary."
         />
 
         <div className="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-6">
@@ -50,7 +50,8 @@ export default function Winners() {
                     {winner.place}
                   </span>
                 </div>
-                <h3 className="font-display text-xl md:text-2xl text-bone mt-6">{winner.team}</h3>
+                <p className="font-display text-2xl md:text-3xl text-gold-bright mt-5 font-medium">{winner.prize}</p>
+                <h3 className="font-display text-xl md:text-2xl text-bone mt-2">{winner.team}</h3>
                 <p className="text-mist text-sm mt-1 max-w-[220px]">{winner.project}</p>
               </div>
             );
