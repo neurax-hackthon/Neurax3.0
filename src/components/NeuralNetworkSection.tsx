@@ -29,8 +29,8 @@ const VIDEO_SRC = "/videos/neurax-network-crisp.mp4";
 // Historical photos, revealed inside the empty glowing node centers.
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
-const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2025", title: "NeuraX 1.0" };
-const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2026", title: "NeuraX 2.0" };
+const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2024", title: "NeuraX 1.0" };
+const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2025", title: "NeuraX 2.0" };
 
 // Measured by extracting reference frames from the actual exported clip
 // (10.01s @ 1280x720) and pixel-sampling the hollow ring: both nodes land
@@ -217,19 +217,25 @@ function applyPhotoTransform(el: HTMLDivElement | null, visibility: number) {
   const scale = 0.7 + v * 0.3;
   const driftPx = (1 - v) * 18;
 
-  // A short-lived bloom that peaks mid-transition (v=0.5) and settles back
-  // to nothing once fully shown/hidden - a soft flash as the photo
-  // materializes out of the node's light, and dissolves back into it.
-  const transitionPulse = v * (1 - v) * 4;
-  const blurPx = (1 - v) * 10;
-  const brightness = 1 + transitionPulse * 0.5;
-  const glowRadius = 10 + transitionPulse * 26;
-  const glowAlpha = 0.3 + transitionPulse * 0.45;
-
   el.style.opacity = String(v);
   el.style.transform = `translate(-50%, calc(-50% + ${driftPx}px)) scale(${scale})`;
-  el.style.filter = `blur(${blurPx}px) brightness(${brightness}) drop-shadow(0 0 ${glowRadius}px rgba(233,201,138,${glowAlpha}))`;
   el.style.pointerEvents = v > 0.05 ? "auto" : "none";
+
+  // Heavy filters cause lag on mobile during scroll, only apply on larger screens
+  if (window.innerWidth > 768) {
+    // A short-lived bloom that peaks mid-transition (v=0.5) and settles back
+    // to nothing once fully shown/hidden - a soft flash as the photo
+    // materializes out of the node's light, and dissolves back into it.
+    const transitionPulse = v * (1 - v) * 4;
+    const blurPx = (1 - v) * 10;
+    const brightness = 1 + transitionPulse * 0.5;
+    const glowRadius = 10 + transitionPulse * 26;
+    const glowAlpha = 0.3 + transitionPulse * 0.45;
+    
+    el.style.filter = `blur(${blurPx}px) brightness(${brightness}) drop-shadow(0 0 ${glowRadius}px rgba(233,201,138,${glowAlpha}))`;
+  } else {
+    el.style.filter = "none";
+  }
 }
 
 const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow: string; title: string }>(
@@ -264,7 +270,7 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
           {/* soft screen-blend bloom, bleeding past the photo's edges so
               the video's own gold ring keeps reading through around it */}
           <div
-            className="absolute z-[4] pointer-events-none rounded-full"
+            className="absolute z-[4] pointer-events-none rounded-full hidden md:block"
             style={{
               inset: "-20%",
               mixBlendMode: "screen",
