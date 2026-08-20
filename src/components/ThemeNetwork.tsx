@@ -42,7 +42,7 @@ export default function ThemeNetwork() {
         </div>
 
         <div className="relative w-full aspect-square max-w-md mx-auto min-h-[260px] md:min-h-[340px]">
-          <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full overflow-visible">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 h-full w-full overflow-visible">
             {THEME_CONNECTIONS.map(([a, b], i) => {
               const from = byId[a];
               const to = byId[b];
@@ -86,7 +86,7 @@ export default function ThemeNetwork() {
                   } ${dimmed ? "opacity-30" : "opacity-100"}`}
                 />
                 <span
-                  className={`label-caps mt-2 text-[9px] md:text-[10px] whitespace-nowrap transition-colors duration-300 ${
+                  className={`absolute top-full left-1/2 -translate-x-1/2 mt-2 label-caps text-[9px] md:text-[10px] whitespace-nowrap transition-colors duration-300 ${
                     isActive ? "text-gold-bright" : dimmed ? "text-mist/40" : "text-mist"
                   }`}
                 >

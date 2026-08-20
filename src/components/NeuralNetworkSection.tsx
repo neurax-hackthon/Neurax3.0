@@ -24,13 +24,13 @@ import { useInView } from "../hooks/useInView";
 //   ffmpeg -i neurax-network.mp4 -an -c:v libx264 -preset medium -crf 20 \
 //     -g 6 -keyint_min 6 -sc_threshold 0 -pix_fmt yuv420p \
 //     -movflags +faststart neurax-network-scrub.mp4
-const VIDEO_SRC = "/videos/neurax-network-scrub.mp4";
+const VIDEO_SRC = "/videos/upscaled-video.mp4";
 
 // Historical photos, revealed inside the empty glowing node centers.
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
-const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2024", title: "NEURAX 1.0" };
-const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2025", title: "NEURAX 2.0" };
+const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2024", title: "NeuraX 1.0" };
+const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2025", title: "NeuraX 2.0" };
 
 // Measured by extracting reference frames from the actual exported clip
 // (10.01s @ 1280x720) and pixel-sampling the hollow ring: both nodes land
@@ -49,20 +49,20 @@ const NODE_SCREEN_POSITION = { leftPercent: 50, topPercent: 50 };
 //   into the connection by ~47%; node 2 starts opening ~52%, fully open
 //   62-79%, camera pulls back out by ~87%. Tune these four numbers per
 //   photo if the timing drifts on a re-render.
-const NODE_1_FADE_IN_START = 0.18;
-const NODE_1_HOLD_START = 0.3;
+const NODE_1_FADE_IN_START = 0.32;
+const NODE_1_HOLD_START = 0.37;
 const NODE_1_HOLD_END = 0.4;
 const NODE_1_FADE_OUT_END = 0.47;
 
-const NODE_2_FADE_IN_START = 0.52;
-const NODE_2_HOLD_START = 0.62;
+const NODE_2_FADE_IN_START = 0.57;
+const NODE_2_HOLD_START = 0.67;
 const NODE_2_HOLD_END = 0.79;
 const NODE_2_FADE_OUT_END = 0.87;
 
 // Total scroll distance the pinned section consumes, in viewport heights.
 // Deliberately long: the camera journey should read as a few unhurried
 // scroll gestures, not resolve in a single flick of the wheel.
-const SCROLL_DISTANCE_VH = 320;
+const SCROLL_DISTANCE_VH = 480;
 
 /* ==========================================================================*/
 

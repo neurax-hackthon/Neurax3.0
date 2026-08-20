@@ -49,7 +49,7 @@ export default function IntroScreen({ onEnter }: Props) {
           className="intro-reveal opacity-0 animate-fade-in label-caps text-xs md:text-sm text-cyan mb-6"
           style={{ animationDelay: `${REVEAL_DELAYS[0]}s` }}
         >
-          A CINEMATIC HACKATHON EXPERIENCE
+          A COMPETITIVE HACKATHON EXPERIENCE
         </span>
 
         <h1

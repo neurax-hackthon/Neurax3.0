@@ -26,6 +26,7 @@
   --animate-drift: drift 12s ease-in-out infinite;
   --animate-fade-in: fade-in 1.2s ease forwards;
   --animate-signal: signal-travel 3.2s linear infinite;
+  --animate-marquee: marquee 35s linear infinite;
 
   @keyframes pulse-slow {
     0%, 100% { opacity: 0.35; }
@@ -44,6 +45,10 @@
     8% { opacity: 1; }
     92% { opacity: 1; }
     100% { top: 100%; opacity: 0; }
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 }
 

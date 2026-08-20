@@ -3,7 +3,7 @@ import SectionHeading from "./SectionHeading";
 
 // Content here is assembled from copy and data that already exists
 // elsewhere in the app (EVENT, RULES' Eligibility group, BENEFITS) rather
-// than invented — swap in official "what is NeurAX" copy when available.
+// than invented — swap in official "what is NeuraX" copy when available.
 const eligibility = RULES.find((group) => group.title === "Eligibility");
 const whyJoin = BENEFITS.slice(0, 4);
 
@@ -13,13 +13,13 @@ export default function AboutNeurax() {
       <div className="relative max-w-5xl mx-auto">
         <SectionHeading
           eyebrow="THE ORIGIN"
-          title="About NeurAX"
-          subtitle={`A cinematic hackathon experience: ${EVENT.tagline.toLowerCase()}`}
+          title="About NeuraX"
+          subtitle={`A competitive hackathon experience: ${EVENT.tagline.toLowerCase()}`}
         />
 
         <div className="grid md:grid-cols-2 gap-8">
           <div className="rounded-2xl border border-line bg-charcoal/60 p-7 md:p-8">
-            <h3 className="label-caps text-sm text-gold-bright mb-4">What Is NeurAX?</h3>
+            <h3 className="label-caps text-sm text-gold-bright mb-4">What Is NeuraX?</h3>
             <p className="text-mist text-sm md:text-base leading-relaxed">
               {EVENT.name} {EVENT.edition} is a 24-hour hackathon — one continuous signal from spark
               to showcase. Teams turn an idea into a working demo, guided by mentors along the way

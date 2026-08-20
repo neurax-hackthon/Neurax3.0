@@ -50,7 +50,7 @@ export default function AdminPanel() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <span className="label-caps text-xs text-gold-bright">⚙ NeurAX Control Center</span>
+          <span className="label-caps text-xs text-gold-bright">⚙ NeuraX Control Center</span>
           <button
             type="button"
             onClick={() => setOpen(false)}

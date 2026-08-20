@@ -17,7 +17,7 @@ export default function Footer() {
           >
             ❤️
           </button>
-          by the NeurAX Team
+          by the NeuraX Team
         </p>
       </div>
     </footer>
