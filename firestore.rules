@@ -1,0 +1,23 @@
+rules_version = '2';
+
+// Deployed to the neurax-3 Firebase project (console.firebase.google.com ->
+// NeuraX-3 -> Firestore -> Rules). Keep this file in sync with whatever is
+// actually published there — it's the source of truth for review, but
+// Firebase only enforces what's live in the console/CLI deploy.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // NeuraX 3.0 shared hackathon state: everyone can read (so the site can
+    // show live launch/timer/reveal status to all visitors), but only the
+    // whitelisted admin accounts can write (start, reveal, reset, broadcast).
+    // This is the real security boundary — the ADMIN_EMAILS list in
+    // src/config/admin.ts is a UX convenience only, not enforcement.
+    match /neurax3/hackathon {
+      allow read: if true;
+      allow write: if request.auth != null &&
+        request.auth.token.email in [
+          'staykaro26@gmail.com',
+          'admin@neurax.dev'
+        ];
+    }
+  }
+}
