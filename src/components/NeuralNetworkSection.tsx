@@ -258,10 +258,9 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
         <div className="relative" style={{ width: "clamp(150px, 17vw, 260px)" }}>
           {/* the photo, contained inside the node's empty glowing center */}
           <div
-            className="relative z-[3] overflow-hidden rounded-2xl border border-gold-dim/70"
+            className="relative z-[3] overflow-hidden rounded-2xl border border-gold-dim/70 shadow-none md:shadow-[0_0_22px_rgba(201,163,95,0.35),0_0_60px_rgba(201,163,95,0.18)]"
             style={{
               aspectRatio: "4 / 3",
-              boxShadow: "0 0 22px rgba(201,163,95,0.35), 0 0 60px rgba(201,163,95,0.18)",
             }}
           >
             <img src={src} alt={alt} draggable={false} className="h-full w-full object-cover" />
