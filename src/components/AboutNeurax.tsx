@@ -12,8 +12,8 @@ export default function AboutNeurax() {
     <section id="about" className="relative py-28 md:py-36 px-6 bg-ink overflow-hidden">
       <div className="relative max-w-5xl mx-auto">
         <SectionHeading
-          eyebrow="THE ORIGIN"
-          title="About NeuraX"
+          eyebrow="NOW ANNOUNCING"
+          title="NeuraX 3.0"
           subtitle={`A competitive hackathon experience: ${EVENT.tagline.toLowerCase()}`}
         />
 
