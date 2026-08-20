@@ -24,7 +24,7 @@ import { useInView } from "../hooks/useInView";
 //   ffmpeg -i neurax-network.mp4 -an -c:v libx264 -preset medium -crf 20 \
 //     -g 6 -keyint_min 6 -sc_threshold 0 -pix_fmt yuv420p \
 //     -movflags +faststart neurax-network-scrub.mp4
-const VIDEO_SRC = "/videos/upscaled-video.mp4";
+const VIDEO_SRC = "/videos/neurax-network-crisp.mp4";
 
 // Historical photos, revealed inside the empty glowing node centers.
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
