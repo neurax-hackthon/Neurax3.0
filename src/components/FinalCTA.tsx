@@ -12,7 +12,7 @@ export default function FinalCTA() {
         <span className="label-caps text-xs md:text-sm text-cyan mb-6">CONTACT US · THE NETWORK IS COMPLETE</span>
 
         <h2 className="font-display text-5xl sm:text-6xl md:text-7xl font-medium text-bone leading-none">
-          NEUR<span className="text-gold-bright">A</span>X
+          NEURA<span className="text-gold-bright">X</span>
         </h2>
         <p className="label-caps text-sm md:text-base text-gold mt-3 tracking-[0.5em]">{EVENT.edition}</p>
 

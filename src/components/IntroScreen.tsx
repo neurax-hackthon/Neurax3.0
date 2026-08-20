@@ -56,7 +56,7 @@ export default function IntroScreen({ onEnter }: Props) {
           className="intro-reveal opacity-0 animate-fade-in font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-medium tracking-tight text-bone leading-none"
           style={{ animationDelay: `${REVEAL_DELAYS[1]}s` }}
         >
-          NEUR<span className="text-gold-bright">A</span>X
+          NEURA<span className="text-gold-bright">X</span>
         </h1>
         <p
           className="intro-reveal opacity-0 animate-fade-in label-caps text-sm md:text-base text-gold mt-4 tracking-[0.5em]"

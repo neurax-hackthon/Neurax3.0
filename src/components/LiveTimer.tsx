@@ -36,7 +36,7 @@ export default function LiveTimer() {
             </span>
 
             <h2 className="font-display text-3xl md:text-5xl text-bone">
-              NEUR<span className="text-gold-bright">A</span>X 3.0
+              NEURA<span className="text-gold-bright">X</span> 3.0
             </h2>
             <p className="label-caps text-xs md:text-sm text-gold mt-3 tracking-[0.4em]">
               24-Hour Hackathon

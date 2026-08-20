@@ -23,7 +23,7 @@ export default function Navigation() {
           }}
           className="font-display text-lg tracking-wide text-bone"
         >
-          NEUR<span className="text-gold-bright">A</span>X
+          NEURA<span className="text-gold-bright">X</span>
         </a>
 
         <ul className="hidden md:flex items-center gap-7">
