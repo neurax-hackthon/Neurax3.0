@@ -228,37 +228,37 @@ export type ProcessStage = {
 
 export const PROCESS: ProcessStage[] = [
   {
-    date: "Feb 23, 2026",
+    date: "Aug 21, 2026",
     title: "Registration Opens",
     description: "Teams can start registering",
     icon: "📝",
   },
   {
-    date: "Mar 8, 2026",
+    date: "Sep 10, 2026",
     title: "Registration Closes",
     description: "Last date to register teams",
     icon: "📌",
   },
   {
-    date: "Mar 8, 2026",
+    date: "Sep 11, 2026",
     title: "Round 1 - Abstract submission",
     description: "Submit your project abstract for evaluation",
     icon: "📄",
   },
   {
-    date: "Mar 10, 2026",
+    date: "Sep 13, 2026",
     title: "Shortlisted Teams",
     description: "Selected teams will be notified via email",
     icon: "✅",
   },
   {
-    date: "Mar 11, 2026",
+    date: "Sep 14, 2026",
     title: "Final Confirmation",
     description: "Shortlisted teams confirm participation",
     icon: "☑️",
   },
   {
-    date: "Mar 14–15, 2026",
+    date: "Sep 19–20, 2026",
     title: "NeuraX 3.0 Hackathon",
     description: "24-hour innovation begins at CMR Technical Campus",
     icon: "🚀",
