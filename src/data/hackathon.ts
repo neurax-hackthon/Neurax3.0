@@ -9,7 +9,7 @@ export const EVENT = {
   edition: "HACKATHON 3.0",
   tagline: "BUILD. CONNECT. INNOVATE.",
   countdownTarget: "2026-09-19T09:00:00",
-  venue: "Innovation Hall, Central Campus",
+  venue: "CMR TECHNICAL CAMPUS",
   dateLabel: "SEP 19–20, 2026",
 };
 
@@ -144,7 +144,7 @@ export const RULES: RuleGroup[] = [
   {
     title: "Eligibility",
     points: [
-      "Open to teams of 2–4 participants.",
+      "Open to teams of 3–4 participants.",
       "At least one member must be a currently enrolled student.",
       "Cross-institution teams are welcome.",
     ],

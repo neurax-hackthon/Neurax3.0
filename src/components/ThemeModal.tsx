@@ -67,8 +67,7 @@ export default function ThemeModal({ theme, revealed, onClose }: Props) {
                 Problem Statement Locked
               </p>
               <p className="text-mist text-sm mt-3 max-w-xs">
-                The detailed challenge for this track will be revealed by the organizers.
-                Stay tuned.
+                Revealed by the organizers on the day of hackathon
               </p>
             </div>
           ) : (

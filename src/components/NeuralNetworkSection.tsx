@@ -10,7 +10,7 @@ import { useInView } from "../hooks/useInView";
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
 const PHOTO_1_CAPTION = { eyebrow: "SEPTEMBER 2025", title: "NeuraX 1.0" };
-const PHOTO_2_CAPTION = { eyebrow: "FEBRUARY 2026", title: "NeuraX 2.0" };
+const PHOTO_2_CAPTION = { eyebrow: "MARCH 2026", title: "NeuraX 2.0" };
 
 const NODE_SCREEN_POSITION = { leftPercent: 50, topPercent: 50 };
 
@@ -231,7 +231,7 @@ function MobileLegacySection() {
           title={PHOTO_1_CAPTION.title}
           edition="1.0"
           participants="420"
-          projects="86"
+          projects="35"
           champion="Team Axiom"
           delay={0}
         />
@@ -249,7 +249,7 @@ function MobileLegacySection() {
           title={PHOTO_2_CAPTION.title}
           edition="2.0"
           participants="610"
-          projects="134"
+          projects="75"
           champion="Team Lumen"
           delay={150}
         />

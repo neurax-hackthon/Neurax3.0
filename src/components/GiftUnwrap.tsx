@@ -25,7 +25,7 @@ type Props = {
 };
 
 export default function GiftUnwrap({
-  recipientName = "Respected Director",
+  recipientName = "Respected Chairman",
   revealTitle = "NeuraX 3.0",
   revealMessage = "With gratitude and respect,\nthe NeuraX Team invites you\nto inaugurate HACKATHON 3.0",
   onDismiss,
