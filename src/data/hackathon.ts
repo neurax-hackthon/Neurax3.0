@@ -180,7 +180,7 @@ export type PreviousEdition = {
 export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
   {
     edition: "NeuraX 1.0",
-    year: "2024",
+    year: "2025",
     participants: "140",
     projects: "35",
     winningTeam: "Team Axiom",
@@ -189,7 +189,7 @@ export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
   },
   {
     edition: "NeuraX 2.0",
-    year: "2025",
+    year: "2026",
     participants: "300",
     projects: "75",
     winningTeam: "Team Lumen",

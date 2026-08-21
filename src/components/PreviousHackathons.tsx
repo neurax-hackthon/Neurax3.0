@@ -29,7 +29,7 @@ export default function PreviousHackathons() {
                     </>
                   ) : (
                     <NeuralBackdrop
-                      tint={edition.year === "2024" ? "gold" : "cyan"}
+                      tint={edition.year === "2025" ? "gold" : "cyan"}
                       className="opacity-30 group-hover:opacity-50 transition-opacity"
                     />
                   )}
