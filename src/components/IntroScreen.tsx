@@ -107,12 +107,12 @@ export default function IntroScreen({ onEnter }: Props) {
 function TimeBlock({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <span className="font-display text-4xl md:text-6xl text-bone tabular-nums">{value}</span>
+      <span className="font-sans font-medium text-4xl md:text-6xl text-bone tabular-nums">{value}</span>
       <span className="label-caps text-[10px] text-mist mt-1">{label}</span>
     </div>
   );
 }
 
 function Colon() {
-  return <span className="font-display text-3xl md:text-5xl text-gold-dim -mt-4">:</span>;
+  return <span className="font-sans font-medium text-3xl md:text-5xl text-gold-dim -mt-4 opacity-60">:</span>;
 }

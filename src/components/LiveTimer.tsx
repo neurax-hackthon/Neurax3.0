@@ -86,7 +86,7 @@ function TimeBlock({ value, label }: { value: string; label: string }) {
         }}
       >
         <span
-          className="font-display text-bone tabular-nums leading-none"
+          className="font-sans font-medium text-bone tabular-nums leading-none"
           style={{ fontSize: "clamp(2.75rem, 8vw, 6.5rem)" }}
         >
           {value}
@@ -100,7 +100,7 @@ function TimeBlock({ value, label }: { value: string; label: string }) {
 function Colon() {
   return (
     <span
-      className="font-display text-gold-dim self-center"
+      className="font-sans font-medium text-gold-dim self-center opacity-60"
       style={{ fontSize: "clamp(2rem, 5vw, 4rem)", marginTop: "-1.5rem" }}
     >
       :
