@@ -230,7 +230,7 @@ function MobileLegacySection() {
           eyebrow={PHOTO_1_CAPTION.eyebrow}
           title={PHOTO_1_CAPTION.title}
           edition="1.0"
-          participants="420"
+          participants="140"
           projects="35"
           champion="Team Axiom"
           delay={0}
@@ -248,7 +248,7 @@ function MobileLegacySection() {
           eyebrow={PHOTO_2_CAPTION.eyebrow}
           title={PHOTO_2_CAPTION.title}
           edition="2.0"
-          participants="610"
+          participants="300"
           projects="75"
           champion="Team Lumen"
           delay={150}

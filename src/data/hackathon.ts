@@ -181,8 +181,8 @@ export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
   {
     edition: "NeuraX 1.0",
     year: "2024",
-    participants: "420",
-    projects: "86",
+    participants: "140",
+    projects: "35",
     winningTeam: "Team Axiom",
     photo: "/images/neurax-history1.jpeg",
     siteUrl: "https://neurax2025.vercel.app/",
@@ -190,8 +190,8 @@ export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
   {
     edition: "NeuraX 2.0",
     year: "2025",
-    participants: "610",
-    projects: "134",
+    participants: "300",
+    projects: "75",
     winningTeam: "Team Lumen",
     photo: "/images/neurax-history-2.jpeg",
     siteUrl: "https://neurax2-0.vercel.app/",
