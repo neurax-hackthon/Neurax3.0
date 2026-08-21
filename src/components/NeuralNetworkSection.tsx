@@ -7,7 +7,6 @@ import { useInView } from "../hooks/useInView";
  * MOBILE  — lightweight CSS animated "Neural Legacy" section (no video, no pin)
  * ==========================================================================*/
 
-const VIDEO_SRC = "/videos/neurax-network.mp4";
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
 const PHOTO_1_CAPTION = { eyebrow: "SEPTEMBER 2025", title: "NeuraX 1.0" };
@@ -62,31 +61,48 @@ export default function NeuralNetworkSection() {
 function DesktopVideoSection() {
   const outerRef = useRef<HTMLDivElement | null>(null);
   const pinnedRef = useRef<HTMLDivElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const photo1Ref = useRef<HTMLDivElement | null>(null);
   const photo2Ref = useRef<HTMLDivElement | null>(null);
-  const durationRef = useRef(0);
-  const pendingRef = useRef(0);
-  const seekingRef = useRef(false);
-  const rafIdRef = useRef(0);
+  
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const { ref: lazyRef, hasBeenInView } = useInView<HTMLDivElement>({ rootMargin: "400px" });
 
-  function trySeek() {
-    const video = videoRef.current;
-    if (!video) return;
-    const target = pendingRef.current;
-    if (Math.abs(video.currentTime - target) < 0.03) return;
-    seekingRef.current = true;
-    video.currentTime = target;
-  }
-
   useEffect(() => {
-    const video = videoRef.current;
-    if (!hasBeenInView || !video || video.dataset.armed === "true") return;
-    video.preload = "auto";
-    video.src = VIDEO_SRC;
-    video.load();
-    video.dataset.armed = "true";
+    if (!hasBeenInView) return;
+    if (imagesRef.current.length > 0) return; // already loaded
+
+    const loadImages = async () => {
+      const promises = [];
+      for (let i = 1; i <= 240; i++) {
+        promises.push(
+          new Promise<HTMLImageElement>((resolve, reject) => {
+            const img = new Image();
+            img.src = `/videos/frames/frame_${i.toString().padStart(4, '0')}.jpg`;
+            img.onload = () => resolve(img);
+            img.onerror = () => reject();
+          })
+        );
+      }
+      
+      try {
+        const loadedImages = await Promise.all(promises);
+        imagesRef.current = loadedImages;
+
+        // Draw first frame immediately
+        const canvas = canvasRef.current;
+        const ctx = canvas?.getContext("2d");
+        if (canvas && ctx && loadedImages[0]) {
+           canvas.width = 1280;
+           canvas.height = 720;
+           ctx.drawImage(loadedImages[0], 0, 0, canvas.width, canvas.height);
+        }
+      } catch (e) {
+        console.error("Failed to load image sequence", e);
+      }
+    };
+
+    loadImages();
   }, [hasBeenInView]);
 
   useEffect(() => {
@@ -110,28 +126,31 @@ function DesktopVideoSection() {
       start: "top top",
       end: "bottom bottom",
       pin: pinnedRef.current,
-      scrub: 0.5, // 0.5 offers a balance between instant response and smoothing out decode stutters
+      scrub: true, // Native 1:1 instant scroll scrub
       onUpdate: (self) => {
         driveFrame(self.progress, node1Window, node2Window);
       },
     });
 
     return () => {
-      cancelAnimationFrame(rafIdRef.current);
       st.kill();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function driveFrame(progress: number, n1: PhotoWindow, n2: PhotoWindow) {
-    const video = videoRef.current;
-    const duration = durationRef.current;
-    if (video && video.dataset.armed === "true" && duration > 0 && video.readyState >= 1) {
-      pendingRef.current = progress * duration;
-      if (!seekingRef.current) trySeek();
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext("2d");
+    const images = imagesRef.current;
+    
+    if (canvas && ctx && images.length === 240) {
+      // map progress (0-1) to frame index (0-239)
+      const frameIndex = Math.min(239, Math.max(0, Math.floor(progress * 239)));
+      ctx.drawImage(images[frameIndex], 0, 0, canvas.width, canvas.height);
     }
-    applyPhotoTransform(photo1Ref.current, photoVisibility(progress, n1), false);
-    applyPhotoTransform(photo2Ref.current, photoVisibility(progress, n2), false);
+
+    applyPhotoTransform(photo1Ref.current, photoVisibility(progress, n1));
+    applyPhotoTransform(photo2Ref.current, photoVisibility(progress, n2));
   }
 
   return (
@@ -144,20 +163,8 @@ function DesktopVideoSection() {
       <div ref={lazyRef} className="absolute inset-0 pointer-events-none" aria-hidden />
 
       <div ref={pinnedRef} className="relative h-screen w-full overflow-hidden bg-void">
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
-          onLoadedMetadata={(e) => {
-            durationRef.current = e.currentTarget.duration || 0;
-            e.currentTarget.pause();
-          }}
-          onSeeked={() => {
-            seekingRef.current = false;
-            trySeek();
-          }}
+        <canvas
+          ref={canvasRef}
           className="absolute inset-0 z-[1] h-full w-full object-cover will-change-transform"
         />
 
@@ -440,26 +447,19 @@ function NeuralBackdropSVG() {
 /* Desktop helpers (unchanged)                                                 */
 /* ─────────────────────────────────────────────────────────────────────────── */
 
-function applyPhotoTransform(el: HTMLDivElement | null, visibility: number, isMobile: boolean) {
+function applyPhotoTransform(el: HTMLDivElement | null, visibility: number) {
   if (!el) return;
   const v = Math.min(1, Math.max(0, visibility));
-  const scale = 0.7 + v * 0.3;
-  const driftPx = (1 - v) * 18;
+  const scale = 0.85 + v * 0.15;
+  const driftPx = (1 - v) * 25;
 
   el.style.opacity = String(v);
-  el.style.transform = `translate(-50%, calc(-50% + ${driftPx}px)) scale(${scale})`;
+  // Hardware accelerated 3D transform with no CPU calculation overhead
+  el.style.transform = `translate3d(-50%, calc(-50% + ${driftPx}px), 0) scale3d(${scale}, ${scale}, 1)`;
   el.style.pointerEvents = v > 0.05 ? "auto" : "none";
 
-  if (!isMobile) {
-    const transitionPulse = v * (1 - v) * 4;
-    const blurPx = (1 - v) * 10;
-    const brightness = 1 + transitionPulse * 0.5;
-    const glowRadius = 10 + transitionPulse * 26;
-    const glowAlpha = 0.3 + transitionPulse * 0.45;
-    el.style.filter = `blur(${blurPx}px) brightness(${brightness}) drop-shadow(0 0 ${glowRadius}px rgba(233,201,138,${glowAlpha}))`;
-  } else {
-    el.style.filter = "none";
-  }
+  // Removed dynamic JS filter (blur/brightness) that causes massive composite lag on scroll
+  el.style.filter = "none";
 }
 
 const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow: string; title: string }>(
@@ -472,8 +472,8 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
           left: `${NODE_SCREEN_POSITION.leftPercent}%`,
           top: `${NODE_SCREEN_POSITION.topPercent}%`,
           opacity: 0,
-          transform: "translate(-50%, calc(-50% + 18px)) scale(0.7)",
-          filter: "blur(10px) brightness(1)",
+          transform: "translate3d(-50%, calc(-50% + 25px), 0) scale3d(0.85, 0.85, 1)",
+          filter: "none",
         }}
       >
         <div className="relative w-[300px] md:w-[clamp(300px,34vw,520px)]">
