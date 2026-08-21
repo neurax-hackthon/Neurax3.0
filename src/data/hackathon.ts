@@ -39,56 +39,54 @@ export type Theme = {
 
 export const THEMES: Theme[] = [
   {
-    id: "ai-fintech",
-    label: "AI in FinTech",
-    icon: "\u{1F4B9}",
-    description: "Apply intelligent automation to how money moves, is assessed, and is managed.",
-    tags: ["AI", "FinTech", "Automation"],
+    id: "ai-industry-automation",
+    label: "AI in Industry Automation",
+    icon: "\u{1F3ED}",
+    description: "AI-powered industrial automation, smart manufacturing, predictive maintenance, process optimization, robotics, and intelligent production systems.",
+    tags: ["SDG 09", "Automation", "Robotics"],
     x: 50,
     y: 14,
+    comingSoon: false,
     problemStatement: {
       code: "PS / 01",
-      summary: "Design an AI-powered financial tool that assesses risk in real time and brings credit or savings access to first-time users.",
-      objectives: [
-        "Use an AI model to assess risk or trustworthiness from limited financial history.",
-        "Give a first-time user a usable, automated path to build a credit or savings history.",
-      ],
-      requirements: [
-        "A working onboarding-to-first-transaction flow.",
-        "A model or heuristic that visibly drives a real decision in that flow.",
-      ],
+      summary: "",
+      objectives: [],
+      requirements: [],
     },
   },
   {
-    id: "ai-industry4",
-    label: "AI in Industry 4.0",
-    icon: "\u{1F3ED}",
-    description: "Bring intelligent automation to the smart factory floor — prediction, monitoring, and control.",
-    tags: ["AI", "Industry 4.0", "IoT", "Automation"],
+    id: "ai-cybersecurity",
+    label: "AI in Cybersecurity",
+    icon: "\u{1F6E1}",
+    description: "AI-driven threat detection, automated vulnerability scanning, anomaly detection, phishing prevention, secure authentication, and resilient network defense.",
+    tags: ["Security", "Cyber", "Defense"],
     x: 18,
     y: 78,
+    comingSoon: false,
     problemStatement: {
       code: "PS / 02",
-      summary: "Build an AI-driven predictive maintenance system that flags equipment failures before they happen using live sensor data.",
+      summary: "Develop an AI-powered cybersecurity solution to proactively detect and mitigate emerging network threats.",
       objectives: [
-        "Detect anomalies or degrading trends in streamed or simulated sensor data.",
-        "Turn a detected anomaly into a concrete, actionable maintenance alert.",
+        "Detect anomalies in network traffic in real-time.",
+        "Classify potential threats and minimize false positives.",
+        "Provide actionable insights for rapid incident response."
       ],
       requirements: [
-        "A working prediction pipeline evaluated against historical or simulated sensor data.",
-        "A dashboard or alerting flow a floor operator could actually act on.",
+        "Implement a scalable machine learning model.",
+        "Provide a dashboard for threat visualization.",
+        "Ensure low latency in threat detection."
       ],
     },
   },
   {
-    id: "tba",
-    label: "Track 3",
-    icon: "\u{2753}",
-    description: "A new track is on the way — the organizers haven't finalized it yet.",
-    tags: ["Coming Soon"],
+    id: "ai-smart-cities",
+    label: "AI in Smart Cities",
+    icon: "\u{1F3D9}",
+    description: "AI-powered urban planning, intelligent transportation, waste management, smart infrastructure, public safety, energy efficiency, and better city services.",
+    tags: ["SDG 11", "Smart City", "Infrastructure"],
     x: 82,
     y: 78,
-    comingSoon: true,
+    comingSoon: false,
     problemStatement: {
       code: "PS / 03",
       summary: "",
@@ -100,9 +98,9 @@ export const THEMES: Theme[] = [
 
 // Connections between theme node ids — drawn as neural pathways.
 export const THEME_CONNECTIONS: [string, string][] = [
-  ["ai-fintech", "ai-industry4"],
-  ["ai-fintech", "tba"],
-  ["ai-industry4", "tba"],
+  ["ai-industry-automation", "ai-cybersecurity"],
+  ["ai-industry-automation", "ai-smart-cities"],
+  ["ai-cybersecurity", "ai-smart-cities"],
 ];
 
 export type ScheduleItem = {
@@ -175,6 +173,8 @@ export type PreviousEdition = {
   participants: string;
   projects: string;
   winningTeam: string;
+  photo?: string;
+  siteUrl?: string;
 };
 
 export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
@@ -184,6 +184,8 @@ export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
     participants: "420",
     projects: "86",
     winningTeam: "Team Axiom",
+    photo: "/images/neurax-history1.jpeg",
+    siteUrl: "https://neurax2025.vercel.app/",
   },
   {
     edition: "NeuraX 2.0",
@@ -191,6 +193,8 @@ export const PREVIOUS_HACKATHONS: PreviousEdition[] = [
     participants: "610",
     projects: "134",
     winningTeam: "Team Lumen",
+    photo: "/images/neurax-history-2.jpeg",
+    siteUrl: "https://neurax2-0.vercel.app/",
   },
 ];
 

@@ -29,8 +29,8 @@ const VIDEO_SRC = "/videos/neurax-network-crisp.mp4";
 // Historical photos, revealed inside the empty glowing node centers.
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
-const PHOTO_1_CAPTION = { eyebrow: "NODE 01 · 2024", title: "NeuraX 1.0" };
-const PHOTO_2_CAPTION = { eyebrow: "NODE 02 · 2025", title: "NeuraX 2.0" };
+const PHOTO_1_CAPTION = { eyebrow: "SEPTEMBER 2025", title: "NeuraX 1.0" };
+const PHOTO_2_CAPTION = { eyebrow: "FEBRUARY 2026", title: "NeuraX 2.0" };
 
 // Measured by extracting reference frames from the actual exported clip
 // (10.01s @ 1280x720) and pixel-sampling the hollow ring: both nodes land
@@ -284,7 +284,7 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
         {/* Large enough to read clearly while still sitting inside node 1's
             hollow center (the tighter of the two nodes) - see the width
             clamp below. */}
-        <div className="relative" style={{ width: "clamp(150px, 17vw, 260px)" }}>
+        <div className="relative w-[300px] md:w-[clamp(300px,34vw,520px)]">
           {/* the photo, contained inside the node's empty glowing center */}
           <div
             className="relative z-[3] overflow-hidden rounded-2xl border border-gold-dim/70"
