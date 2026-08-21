@@ -60,7 +60,7 @@ export default function AboutNeurax() {
 
         <div className="mt-12 flex justify-center">
           <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfELUvKrZS2koDgq92jZzjzFqanV5jiS5AjghIE2gXNMFVygA/viewform?usp=send_form"
+            href="https://forms.gle/RCSs4ajT6XzV2evJA"
             target="_blank"
             rel="noreferrer"
             className="label-caps text-xs px-8 py-4 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"

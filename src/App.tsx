@@ -19,9 +19,14 @@ import SponsorsPartners from "./components/SponsorsPartners";
 import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import AdminPanel from "./components/AdminPanel";
+import GiftUnwrap from "./components/GiftUnwrap";
 
 function App() {
   const [introDone, setIntroDone] = useState(false);
+  const [giftMode, setGiftMode] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return new URLSearchParams(window.location.search).has("gift");
+  });
 
   useEffect(() => {
     document.body.style.overflow = introDone ? "" : "hidden";
@@ -29,6 +34,19 @@ function App() {
       requestAnimationFrame(() => ScrollTrigger.refresh());
     }
   }, [introDone]);
+
+  // Gift inauguration mode — fullscreen overlay
+  if (giftMode) {
+    return (
+      <GiftUnwrap
+        onDismiss={() => {
+          // Remove ?gift from URL and show the main site
+          window.history.replaceState({}, "", window.location.pathname);
+          setGiftMode(false);
+        }}
+      />
+    );
+  }
 
   return (
     <div className="grain">

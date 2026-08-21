@@ -20,7 +20,7 @@ export default function FinalCTA() {
         <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 gap-5 w-full max-w-lg">
           {/* Phone */}
           <a
-            href="tel:+917995760212"
+            href="tel:+919398856411"
             className="flex items-center gap-4 rounded-2xl border border-line bg-charcoal/60 hover:border-gold-dim transition-colors duration-300 px-6 py-5"
           >
             <span className="flex items-center justify-center h-10 w-10 rounded-full bg-gold-bright/10 text-gold-bright text-lg shrink-0">
@@ -28,7 +28,7 @@ export default function FinalCTA() {
             </span>
             <div className="text-left">
               <p className="label-caps text-[10px] text-mist">Phone</p>
-              <p className="text-bone text-sm mt-0.5">+91 7995760212</p>
+              <p className="text-bone text-sm mt-0.5">+91 9398856411</p>
             </div>
           </a>
 
@@ -53,7 +53,7 @@ export default function FinalCTA() {
 
         <div className="mt-8 flex flex-col sm:flex-row items-center gap-4">
           <a
-            href="https://docs.google.com/forms/d/e/1FAIpQLSfELUvKrZS2koDgq92jZzjzFqanV5jiS5AjghIE2gXNMFVygA/viewform?usp=send_form"
+            href="https://forms.gle/RCSs4ajT6XzV2evJA"
             target="_blank"
             rel="noreferrer"
             className="label-caps text-xs px-8 py-4 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"

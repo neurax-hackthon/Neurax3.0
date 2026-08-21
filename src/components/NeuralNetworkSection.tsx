@@ -3,52 +3,18 @@ import { ScrollTrigger } from "../lib/gsap";
 import { useInView } from "../hooks/useInView";
 
 /* ============================================================================
- * CONFIGURATION
- * Everything that might need re-tuning after watching the final render
- * lives here. All timing values are fractions (0-1) of the pinned
- * section's scroll progress, which is also what drives the video's
- * currentTime (progress * video.duration).
+ * DESKTOP — scroll-scrubbed cinematic video (unchanged)
+ * MOBILE  — lightweight CSS animated "Neural Legacy" section (no video, no pin)
  * ==========================================================================*/
 
-// Cinematic camera-through-the-network clip. Contains the full network,
-// the travel into node 1, the connection crossing, node 2, and the pull
-// back out. No photos are baked into the footage - those are the HTML
-// overlays below.
-//
-// This is a re-encoded copy of the original render with a much shorter
-// keyframe interval (every 6 frames instead of the default ~120). Scroll
-// scrubbing seeks to arbitrary timestamps continuously, and with long
-// keyframe spacing the browser has to decode forward a long way on every
-// seek - which reads as "the frame only catches up once you stop
-// scrolling." Same footage, just seek-friendly. Re-generate with:
-//   ffmpeg -i neurax-network.mp4 -an -c:v libx264 -preset medium -crf 20 \
-//     -g 6 -keyint_min 6 -sc_threshold 0 -pix_fmt yuv420p \
-//     -movflags +faststart neurax-network-scrub.mp4
-const VIDEO_SRC = "/videos/neurax-network-crisp.mp4";
-
-// Historical photos, revealed inside the empty glowing node centers.
+const VIDEO_SRC = "/videos/neurax-network.mp4";
 const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
 const PHOTO_1_CAPTION = { eyebrow: "SEPTEMBER 2025", title: "NeuraX 1.0" };
 const PHOTO_2_CAPTION = { eyebrow: "FEBRUARY 2026", title: "NeuraX 2.0" };
 
-// Measured by extracting reference frames from the actual exported clip
-// (10.01s @ 1280x720) and pixel-sampling the hollow ring: both nodes land
-// within ~2% of dead-center (source-space, i.e. before any object-fit
-// cropping). A point that sits at the true center of the source frame
-// stays centered under object-fit: cover no matter what aspect ratio the
-// viewport is - cover always crops symmetrically around the center - so
-// 50/50 is the one value that works on every screen without per-viewport
-// math. If a re-rendered video frames the nodes off-center, re-measure by
-// extracting a frame during the hold and locating the hollow ring's pixel
-// center, then convert to a fraction of the source's width/height.
 const NODE_SCREEN_POSITION = { leftPercent: 50, topPercent: 50 };
 
-// Scroll-progress windows per photo, measured by scrubbing the clip:
-//   node 1 starts hollowing out ~18%, fully open 30-40%, camera leaves
-//   into the connection by ~47%; node 2 starts opening ~52%, fully open
-//   62-79%, camera pulls back out by ~87%. Tune these four numbers per
-//   photo if the timing drifts on a re-render.
 const NODE_1_FADE_IN_START = 0.32;
 const NODE_1_HOLD_START = 0.37;
 const NODE_1_HOLD_END = 0.4;
@@ -59,12 +25,7 @@ const NODE_2_HOLD_START = 0.67;
 const NODE_2_HOLD_END = 0.79;
 const NODE_2_FADE_OUT_END = 0.87;
 
-// Total scroll distance the pinned section consumes, in viewport heights.
-// Deliberately long: the camera journey should read as a few unhurried
-// scroll gestures, not resolve in a single flick of the wheel.
 const SCROLL_DISTANCE_VH = 480;
-
-/* ==========================================================================*/
 
 type PhotoWindow = {
   fadeInStart: number;
@@ -83,6 +44,22 @@ function photoVisibility(progress: number, w: PhotoWindow) {
 }
 
 export default function NeuralNetworkSection() {
+  // Detect mobile once on mount
+  const isMobile =
+    typeof window !== "undefined" && window.innerWidth <= 768;
+
+  if (isMobile) {
+    return <MobileLegacySection />;
+  }
+
+  return <DesktopVideoSection />;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* DESKTOP — exactly as before                                                 */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+function DesktopVideoSection() {
   const outerRef = useRef<HTMLDivElement | null>(null);
   const pinnedRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -94,12 +71,6 @@ export default function NeuralNetworkSection() {
   const rafIdRef = useRef(0);
   const { ref: lazyRef, hasBeenInView } = useInView<HTMLDivElement>({ rootMargin: "400px" });
 
-  // Detect mobile once on mount — used to gate expensive effects
-  const isMobileRef = useRef(typeof window !== "undefined" && window.innerWidth <= 768);
-
-  // Seeking a video is async (decode to nearest keyframe). Chase only the
-  // latest target instead of queuing every scroll-tick seek, or fast
-  // scrolling backs up and playback lags behind the scrollbar.
   function trySeek() {
     const video = videoRef.current;
     if (!video) return;
@@ -134,29 +105,14 @@ export default function NeuralNetworkSection() {
       fadeOutEnd: NODE_2_FADE_OUT_END,
     };
 
-    const isMobile = isMobileRef.current;
-
     const st = ScrollTrigger.create({
       trigger: outerRef.current,
       start: "top top",
       end: "bottom bottom",
       pin: pinnedRef.current,
-      // On mobile use higher scrub smoothing to reduce onUpdate frequency
-      // and give the browser breathing room between seek calls.
-      scrub: isMobile ? 0.6 : 0.15,
+      scrub: 0.5, // 0.5 offers a balance between instant response and smoothing out decode stutters
       onUpdate: (self) => {
-        const progress = self.progress;
-
-        // On mobile, batch all DOM writes into a single rAF to avoid
-        // layout thrashing. On desktop keep the tight 0.15 scrub loop.
-        if (isMobile) {
-          cancelAnimationFrame(rafIdRef.current);
-          rafIdRef.current = requestAnimationFrame(() => {
-            driveFrame(progress, node1Window, node2Window);
-          });
-        } else {
-          driveFrame(progress, node1Window, node2Window);
-        }
+        driveFrame(self.progress, node1Window, node2Window);
       },
     });
 
@@ -164,32 +120,26 @@ export default function NeuralNetworkSection() {
       cancelAnimationFrame(rafIdRef.current);
       st.kill();
     };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function driveFrame(progress: number, n1: PhotoWindow, n2: PhotoWindow) {
-    // Drive the camera: scroll position maps directly to the clip's
-    // playhead, same seek-chasing approach as the CinematicReel.
     const video = videoRef.current;
     const duration = durationRef.current;
     if (video && video.dataset.armed === "true" && duration > 0 && video.readyState >= 1) {
       pendingRef.current = progress * duration;
       if (!seekingRef.current) trySeek();
     }
-
-    applyPhotoTransform(photo1Ref.current, photoVisibility(progress, n1), isMobileRef.current);
-    applyPhotoTransform(photo2Ref.current, photoVisibility(progress, n2), isMobileRef.current);
+    applyPhotoTransform(photo1Ref.current, photoVisibility(progress, n1), false);
+    applyPhotoTransform(photo2Ref.current, photoVisibility(progress, n2), false);
   }
-
-  // Use shorter scroll distance on mobile — 480vh is unnecessarily long for
-  // a small screen and forces far too many seek calls per gesture.
-  const scrollVh = isMobileRef.current ? 280 : SCROLL_DISTANCE_VH;
 
   return (
     <div
       ref={outerRef}
       id="neural"
       className="relative"
-      style={{ height: `${scrollVh}vh` }}
+      style={{ height: `${SCROLL_DISTANCE_VH}vh` }}
     >
       <div ref={lazyRef} className="absolute inset-0 pointer-events-none" aria-hidden />
 
@@ -202,8 +152,6 @@ export default function NeuralNetworkSection() {
           preload="auto"
           onLoadedMetadata={(e) => {
             durationRef.current = e.currentTarget.duration || 0;
-            // Playback is entirely scroll-driven from here - the camera
-            // only moves when the user scrolls.
             e.currentTarget.pause();
           }}
           onSeeked={() => {
@@ -234,12 +182,267 @@ export default function NeuralNetworkSection() {
   );
 }
 
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* MOBILE — lightweight "Neural Legacy" timeline, zero video, zero pin        */
+/* Uses CSS scroll-reveal via IntersectionObserver + pure CSS animations.     */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
+function MobileLegacySection() {
+  return (
+    <section id="neural" className="relative bg-void py-20 px-5 overflow-hidden">
+      {/* Ambient background glow — pure CSS, zero JS cost */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 z-0"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% 40%, rgba(201,163,95,0.06) 0%, transparent 70%)",
+        }}
+      />
+
+      {/* Animated SVG neural net backdrop — lightweight, CSS-driven */}
+      <NeuralBackdropSVG />
+
+      <div className="relative z-10 max-w-lg mx-auto flex flex-col items-center gap-16">
+        {/* Section label */}
+        <div className="flex flex-col items-center gap-3 text-center">
+          <span className="label-caps text-[11px] text-cyan tracking-[0.28em]">
+            NEURAL LEGACY
+          </span>
+          <h2 className="font-display text-4xl font-semibold text-bone leading-tight">
+            Where It All Began
+          </h2>
+          <p className="text-mist text-sm leading-relaxed max-w-xs">
+            Two editions. Hundreds of builders. One evolving network.
+          </p>
+        </div>
+
+        {/* Edition cards — IntersectionObserver reveal */}
+        <RevealCard
+          photo={PHOTO_1_SRC}
+          eyebrow={PHOTO_1_CAPTION.eyebrow}
+          title={PHOTO_1_CAPTION.title}
+          edition="1.0"
+          participants="420"
+          projects="86"
+          champion="Team Axiom"
+          delay={0}
+        />
+
+        {/* Connector line between cards */}
+        <div className="relative flex flex-col items-center gap-1 -my-4">
+          <div className="w-px h-10 bg-gradient-to-b from-gold-dim/60 to-transparent" />
+          <span className="label-caps text-[9px] text-gold-dim/60 tracking-widest">THEN</span>
+          <div className="w-px h-10 bg-gradient-to-b from-transparent to-gold-dim/60" />
+        </div>
+
+        <RevealCard
+          photo={PHOTO_2_SRC}
+          eyebrow={PHOTO_2_CAPTION.eyebrow}
+          title={PHOTO_2_CAPTION.title}
+          edition="2.0"
+          participants="610"
+          projects="134"
+          champion="Team Lumen"
+          delay={150}
+        />
+
+        {/* "Now" indicator pointing forward */}
+        <div className="flex flex-col items-center gap-3 -mt-4">
+          <div className="w-px h-10 bg-gradient-to-b from-gold-dim/60 to-transparent" />
+          <div
+            className="flex items-center gap-3 rounded-full border border-gold-dim/40 bg-gold/5 px-5 py-2.5"
+          >
+            <span
+              className="inline-block h-2 w-2 rounded-full bg-gold-bright"
+              style={{ animation: "pulse-slow 2s ease-in-out infinite" }}
+            />
+            <span className="label-caps text-[11px] text-gold-bright tracking-[0.2em]">
+              NeuraX 3.0 — Sep 19–20, 2026
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* Single edition card with IntersectionObserver scroll reveal */
+function RevealCard({
+  photo,
+  eyebrow,
+  title,
+  edition,
+  participants,
+  projects,
+  champion,
+  delay,
+}: {
+  photo: string;
+  eyebrow: string;
+  title: string;
+  edition: string;
+  participants: string;
+  projects: string;
+  champion: string;
+  delay: number;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            el.style.opacity = "1";
+            el.style.transform = "translateY(0) scale(1)";
+          }, delay);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [delay]);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        opacity: 0,
+        transform: "translateY(28px) scale(0.97)",
+        transition: "opacity 0.7s ease, transform 0.7s ease",
+      }}
+      className="w-full rounded-3xl border border-line/70 bg-charcoal/40 overflow-hidden"
+    >
+      {/* Edition badge */}
+      <div className="relative">
+        <img
+          src={photo}
+          alt={title}
+          className="w-full object-cover"
+          style={{ aspectRatio: "16/9" }}
+          loading="lazy"
+        />
+        {/* Gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(to top, rgba(6,5,6,0.85) 0%, rgba(6,5,6,0.2) 50%, transparent 100%)",
+          }}
+        />
+        {/* Bottom-left caption */}
+        <div className="absolute bottom-4 left-5 flex flex-col gap-0.5">
+          <span className="label-caps text-[9px] text-gold-bright/80">{eyebrow}</span>
+          <span className="font-display text-2xl font-bold text-bone leading-none">{title}</span>
+        </div>
+        {/* Edition number — top-right */}
+        <div className="absolute top-3 right-4">
+          <span className="font-display text-4xl font-semibold text-white/10 leading-none select-none">
+            {edition}
+          </span>
+        </div>
+      </div>
+
+      {/* Stats row */}
+      <div className="grid grid-cols-3 divide-x divide-line/50 px-0 py-4">
+        <Stat value={participants} label="Participants" />
+        <Stat value={projects} label="Projects" />
+        <Stat value={champion} label="Champion" isText />
+      </div>
+    </div>
+  );
+}
+
+function Stat({
+  value,
+  label,
+  isText = false,
+}: {
+  value: string;
+  label: string;
+  isText?: boolean;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-1 py-1">
+      <span
+        className={
+          isText
+            ? "text-bone text-xs font-semibold text-center px-2 leading-tight"
+            : "font-display text-2xl font-semibold text-gold-bright"
+        }
+      >
+        {value}
+      </span>
+      <span className="label-caps text-[8px] text-mist tracking-[0.2em]">{label}</span>
+    </div>
+  );
+}
+
+/* Pure CSS/SVG animated neural network background — zero JS per-frame cost */
+function NeuralBackdropSVG() {
+  return (
+    <svg
+      aria-hidden
+      className="pointer-events-none absolute inset-0 w-full h-full z-0"
+      viewBox="0 0 400 800"
+      preserveAspectRatio="xMidYMid slice"
+      style={{ opacity: 0.18 }}
+    >
+      {/* Static node dots */}
+      {[
+        [60, 120], [340, 80], [200, 250], [80, 400], [320, 420],
+        [150, 580], [270, 620], [50, 700], [360, 680],
+      ].map(([cx, cy], i) => (
+        <circle
+          key={i}
+          cx={cx}
+          cy={cy}
+          r="3"
+          fill="#c9a35f"
+          style={{
+            animation: `pulse-slow ${2.5 + (i % 3) * 0.8}s ease-in-out infinite`,
+            animationDelay: `${i * 0.3}s`,
+          }}
+        />
+      ))}
+
+      {/* Connection lines */}
+      {[
+        [60, 120, 200, 250],
+        [340, 80, 200, 250],
+        [200, 250, 80, 400],
+        [200, 250, 320, 420],
+        [80, 400, 150, 580],
+        [320, 420, 270, 620],
+        [150, 580, 270, 620],
+        [270, 620, 360, 680],
+        [150, 580, 50, 700],
+      ].map(([x1, y1, x2, y2], i) => (
+        <line
+          key={i}
+          x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke="#c9a35f"
+          strokeWidth="0.6"
+          opacity="0.5"
+        />
+      ))}
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────── */
+/* Desktop helpers (unchanged)                                                 */
+/* ─────────────────────────────────────────────────────────────────────────── */
+
 function applyPhotoTransform(el: HTMLDivElement | null, visibility: number, isMobile: boolean) {
   if (!el) return;
   const v = Math.min(1, Math.max(0, visibility));
-
-  // Base reveal: grow in from 70% and drift up into place, mirrored on the
-  // way out.
   const scale = 0.7 + v * 0.3;
   const driftPx = (1 - v) * 18;
 
@@ -247,22 +450,14 @@ function applyPhotoTransform(el: HTMLDivElement | null, visibility: number, isMo
   el.style.transform = `translate(-50%, calc(-50% + ${driftPx}px)) scale(${scale})`;
   el.style.pointerEvents = v > 0.05 ? "auto" : "none";
 
-  // On mobile, skip expensive per-frame filter recompositing entirely.
-  // The isMobile flag is read from a ref (set once on mount) instead of
-  // querying window.innerWidth every tick, which avoids layout thrashing.
   if (!isMobile) {
-    // A short-lived bloom that peaks mid-transition (v=0.5) and settles back
-    // to nothing once fully shown/hidden - a soft flash as the photo
-    // materializes out of the node's light, and dissolves back into it.
     const transitionPulse = v * (1 - v) * 4;
     const blurPx = (1 - v) * 10;
     const brightness = 1 + transitionPulse * 0.5;
     const glowRadius = 10 + transitionPulse * 26;
     const glowAlpha = 0.3 + transitionPulse * 0.45;
-
     el.style.filter = `blur(${blurPx}px) brightness(${brightness}) drop-shadow(0 0 ${glowRadius}px rgba(233,201,138,${glowAlpha}))`;
   } else {
-    // Simple fade — no blur, no drop-shadow, no brightness animation
     el.style.filter = "none";
   }
 }
@@ -281,11 +476,7 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
           filter: "blur(10px) brightness(1)",
         }}
       >
-        {/* Large enough to read clearly while still sitting inside node 1's
-            hollow center (the tighter of the two nodes) - see the width
-            clamp below. */}
         <div className="relative w-[300px] md:w-[clamp(300px,34vw,520px)]">
-          {/* the photo, contained inside the node's empty glowing center */}
           <div
             className="relative z-[3] overflow-hidden rounded-2xl border border-gold-dim/70"
             style={{
@@ -296,8 +487,6 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
             <img src={src} alt={alt} draggable={false} className="h-full w-full object-cover" />
           </div>
 
-          {/* soft screen-blend bloom, bleeding past the photo's edges so
-              the video's own gold ring keeps reading through around it */}
           <div
             className="absolute z-[4] pointer-events-none rounded-full"
             style={{

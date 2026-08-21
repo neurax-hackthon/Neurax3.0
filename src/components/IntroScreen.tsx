@@ -52,10 +52,10 @@ export default function IntroScreen({ onEnter }: Props) {
         </span>
 
         <h1
-          className="intro-reveal opacity-0 animate-fade-in font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-medium tracking-tight text-bone leading-none"
+          className="intro-reveal opacity-0 animate-fade-in font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tight text-bone leading-none"
           style={{ animationDelay: `${REVEAL_DELAYS[1]}s` }}
         >
-          NEURA<span className="text-gold-bright">X</span>
+          Neura<span className="text-gold-bright">X</span>
         </h1>
         <p
           className="intro-reveal opacity-0 animate-fade-in label-caps text-sm md:text-base text-gold mt-4 tracking-[0.5em]"
@@ -68,6 +68,12 @@ export default function IntroScreen({ onEnter }: Props) {
           className="intro-reveal opacity-0 animate-fade-in mt-14 flex items-center gap-4 md:gap-8"
           style={{ animationDelay: `${REVEAL_DELAYS[3]}s` }}
         >
+          {Number(countdown.days) > 0 && (
+            <>
+              <TimeBlock value={countdown.days} label="DAYS" />
+              <Colon />
+            </>
+          )}
           <TimeBlock value={countdown.hours} label="HRS" />
           <Colon />
           <TimeBlock value={countdown.minutes} label="MIN" />
