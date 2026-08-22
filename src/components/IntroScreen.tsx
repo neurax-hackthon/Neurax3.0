@@ -97,7 +97,7 @@ export default function IntroScreen({ onEnter }: Props) {
           className="intro-reveal opacity-0 animate-fade-in mt-16 label-caps text-[11px] md:text-xs text-mist hover:text-gold-bright transition-colors border border-line hover:border-gold-dim rounded-full px-6 py-3"
           style={{ animationDelay: `${REVEAL_DELAYS[5]}s` }}
         >
-          Skip Intro
+          Go to Home Page
         </button>
       </div>
     </div>

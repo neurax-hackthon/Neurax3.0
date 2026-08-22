@@ -84,7 +84,7 @@ export default function ThemeNetwork() {
         {/* ─── Triangle network diagram ─── */}
         <div
           className="relative w-full mx-auto"
-          style={{ maxWidth: "560px", aspectRatio: "1 / 1", minHeight: "300px" }}
+          style={{ maxWidth: "800px", aspectRatio: "1 / 1", minHeight: "400px" }}
         >
           {/* SVG layer — triangle lines only, no animated dots */}
           <svg
@@ -123,7 +123,7 @@ export default function ThemeNetwork() {
                   x2={to.x}
                   y2={to.y}
                   stroke={lit ? "#c9a35f" : "#6b5837"}
-                  strokeWidth={lit ? 2.5 : 1.5}
+                  strokeWidth={lit ? 5 : 4}
                   filter={lit ? "url(#gold-glow)" : "url(#dim-glow)"}
                   className="transition-all duration-500"
                   opacity={mounted ? 1 : 0}
@@ -163,8 +163,8 @@ export default function ThemeNetwork() {
                   <span
                     className="absolute rounded-full animate-ping"
                     style={{
-                      width: "44px",
-                      height: "44px",
+                      width: "90px",
+                      height: "90px",
                       background: "rgba(201,163,95,0.18)",
                       top: "50%",
                       left: "50%",
@@ -178,8 +178,8 @@ export default function ThemeNetwork() {
                 <span
                   className="rounded-full transition-all duration-300"
                   style={{
-                    width: isActive ? "32px" : connected ? "24px" : "18px",
-                    height: isActive ? "32px" : connected ? "24px" : "18px",
+                    width: isActive ? "64px" : connected ? "48px" : "36px",
+                    height: isActive ? "64px" : connected ? "48px" : "36px",
                     background: isActive
                       ? "radial-gradient(circle, #e9c98a 30%, #c9a35f 100%)"
                       : connected
@@ -207,8 +207,8 @@ export default function ThemeNetwork() {
                         }),
                     left: "50%",
                     transform: "translateX(-50%)",
-                    fontSize: isActive ? "13px" : "11px",
-                    fontWeight: isActive ? 700 : 600,
+                    fontSize: isActive ? "16px" : "13px",
+                    fontWeight: "bold",
                     letterSpacing: "0.18em",
                     color: isActive
                       ? "#e9c98a"

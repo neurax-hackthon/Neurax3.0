@@ -55,13 +55,12 @@ export default function Winners() {
           subtitle="One winning team per track. Three domains, three equal champions."
         />
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-4">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-4">
           {DOMAIN_PRIZES.map((prize) => (
             <div
               key={prize.domain}
               className={`group relative flex flex-col items-center text-center rounded-2xl border ${prize.border} bg-charcoal/60 backdrop-blur-sm px-6 py-9 ${prize.glow} hover:scale-[1.03] transition-all duration-300 overflow-hidden`}
             >
-              {/* faint radial bloom behind the icon */}
               <div
                 className="pointer-events-none absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 h-48 w-48 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
                 style={{
@@ -72,31 +71,26 @@ export default function Winners() {
                 }}
               />
 
-              {/* icon bubble */}
               <div
                 className={`relative z-10 flex items-center justify-center h-20 w-20 rounded-full border ${prize.border} ${prize.badge} text-4xl mb-5 group-hover:scale-110 transition-transform duration-300`}
               >
                 {prize.icon}
               </div>
 
-              {/* prize amount */}
               <p className={`relative z-10 font-display text-4xl font-semibold ${prize.tagColor}`}>
                 {prize.amount}
               </p>
 
-              {/* domain name */}
               <span
                 className={`relative z-10 label-caps text-[10px] border rounded-full px-3 py-1 mt-3 ${prize.tagColor} ${prize.tagBorder}`}
               >
                 {prize.domain}
               </span>
 
-              {/* description */}
               <p className="relative z-10 text-mist text-sm leading-relaxed mt-4 max-w-[220px]">
                 {prize.description}
               </p>
 
-              {/* bottom accent line */}
               <div
                 className={`absolute bottom-0 left-1/2 -translate-x-1/2 h-[2px] w-0 group-hover:w-3/4 transition-all duration-500 rounded-full ${prize.accent === "cyan" ? "bg-cyan/60" : "bg-gold-bright/60"}`}
               />
@@ -104,7 +98,6 @@ export default function Winners() {
           ))}
         </div>
 
-        {/* total pool callout */}
         <div className="mt-14 flex flex-col items-center gap-3">
           <div className="flex items-center gap-3 rounded-full border border-line bg-charcoal/40 px-6 py-3">
             <span className="text-xl">🏆</span>
@@ -113,6 +106,11 @@ export default function Winners() {
           <p className="text-mist text-xs text-center">
             Additional goodies & swags for all participants · Certificates for all teams
           </p>
+        </div> */}
+
+        <div className="mt-16 flex flex-col items-center justify-center p-12 border border-line rounded-2xl bg-charcoal/40 backdrop-blur-sm">
+          <h3 className="font-display text-3xl md:text-4xl text-gold-bright mb-4">Soon to be disclosed</h3>
+          <p className="text-mist text-lg">Stay tuned for the total prize pool!</p>
         </div>
       </div>
     </section>
