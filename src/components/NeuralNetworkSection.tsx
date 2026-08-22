@@ -7,7 +7,7 @@ import { useInView } from "../hooks/useInView";
  * MOBILE  — lightweight CSS animated "Neural Legacy" section (no video, no pin)
  * ==========================================================================*/
 
-const PHOTO_1_SRC = "/images/neurax-1.0.jpg";
+const PHOTO_1_SRC = "/images/8.jpeg";
 const PHOTO_2_SRC = "/images/neurax-2.0.jpg";
 const PHOTO_1_CAPTION = { eyebrow: "SEPTEMBER 2025", title: "NeuraX 1.0" };
 const PHOTO_2_CAPTION = { eyebrow: "MARCH 2026", title: "NeuraX 2.0" };
@@ -64,7 +64,7 @@ function DesktopVideoSection() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const photo1Ref = useRef<HTMLDivElement | null>(null);
   const photo2Ref = useRef<HTMLDivElement | null>(null);
-  
+
   const imagesRef = useRef<HTMLImageElement[]>([]);
   const { ref: lazyRef, hasBeenInView } = useInView<HTMLDivElement>({ rootMargin: "400px" });
 
@@ -84,7 +84,7 @@ function DesktopVideoSection() {
           })
         );
       }
-      
+
       try {
         const loadedImages = await Promise.all(promises);
         imagesRef.current = loadedImages;
@@ -93,9 +93,9 @@ function DesktopVideoSection() {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext("2d");
         if (canvas && ctx && loadedImages[0]) {
-           canvas.width = 1280;
-           canvas.height = 720;
-           ctx.drawImage(loadedImages[0], 0, 0, canvas.width, canvas.height);
+          canvas.width = 1280;
+          canvas.height = 720;
+          ctx.drawImage(loadedImages[0], 0, 0, canvas.width, canvas.height);
         }
       } catch (e) {
         console.error("Failed to load image sequence", e);
@@ -135,14 +135,14 @@ function DesktopVideoSection() {
     return () => {
       st.kill();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function driveFrame(progress: number, n1: PhotoWindow, n2: PhotoWindow) {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     const images = imagesRef.current;
-    
+
     if (canvas && ctx && images.length === 240) {
       // map progress (0-1) to frame index (0-239)
       const frameIndex = Math.min(239, Math.max(0, Math.floor(progress * 239)));
@@ -344,9 +344,9 @@ function RevealCard({
           }}
         />
         {/* Bottom-left caption */}
-        <div className="absolute bottom-4 left-5 flex flex-col gap-0.5">
-          <span className="label-caps text-[9px] text-gold-bright/80">{eyebrow}</span>
-          <span className="font-display text-2xl font-bold text-bone leading-none">{title}</span>
+        <div className="absolute bottom-4 left-5 flex flex-col gap-1">
+          <span className="label-caps text-[11px] text-gold-bright">{eyebrow}</span>
+          <span className="font-display text-3xl font-bold text-bone leading-none" style={{ textShadow: '0 2px 12px rgba(0,0,0,0.7)' }}>{title}</span>
         </div>
         {/* Edition number — top-right */}
         <div className="absolute top-3 right-4">
@@ -498,9 +498,9 @@ const NodePhoto = forwardRef<HTMLDivElement, { src: string; alt: string; eyebrow
             }}
           />
 
-          <div className="relative z-[5] mt-4 flex flex-col items-center text-center">
-            <span className="label-caps text-[9px] text-gold-bright/90">{eyebrow}</span>
-            <span className="font-display text-sm text-bone/90 mt-0.5">{title}</span>
+          <div className="relative z-[5] mt-5 flex flex-col items-center text-center">
+            <span className="label-caps text-[11px] text-gold-bright tracking-[0.2em]">{eyebrow}</span>
+            <span className="font-display text-xl md:text-2xl font-semibold text-bone mt-1" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>{title}</span>
           </div>
         </div>
       </div>
