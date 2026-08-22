@@ -4,14 +4,14 @@ import { useState, useCallback, useEffect, useRef } from "react";
  * Curtain Raiser — a fullscreen inauguration animation.
  *
  * Phase 1 ("ribbon"): Two luxurious curtains cover the screen with a golden
- *   ribbon stretched across the centre. The user can cut the ribbon by dragging
- *   their mouse/finger across it OR pressing Enter.
+ * ribbon stretched across the centre. The user can cut the ribbon by dragging
+ * their mouse/finger across it OR pressing Enter.
  *
  * Phase 2 ("cutting"): The ribbon snaps and falls away (0.8s).
  *
  * Phase 3 ("opening"): The curtains slowly gather and slide apart with
- *   realistic rounded fabric bunching, revealing the IntroScreen behind them.
- *   Confetti / flakes rain down. After 5 seconds the overlay auto-dismisses.
+ * realistic rounded fabric bunching, revealing the IntroScreen behind them.
+ * Confetti / flakes rain down. After 15 seconds the overlay auto-dismisses.
  */
 
 type Phase = "ribbon" | "cutting" | "opening" | "opened";
@@ -22,7 +22,6 @@ type Props = {
   revealMessage?: string;
   onDismiss?: () => void;
 };
-
 export default function GiftUnwrap({ onDismiss }: Props) {
   const [phase, setPhase] = useState<Phase>("ribbon");
 
@@ -38,13 +37,14 @@ export default function GiftUnwrap({ onDismiss }: Props) {
     }
   }, [phase]);
 
-  // After curtains finish opening, dismiss after 5s total
+  // After curtains finish opening, dismiss after 15s
   useEffect(() => {
     if (phase === "opening") {
       const t = setTimeout(() => {
         setPhase("opened");
         if (onDismiss) onDismiss();
-      }, 5000);
+      }, 15000);
+
       return () => clearTimeout(t);
     }
   }, [phase, onDismiss]);
@@ -57,10 +57,10 @@ export default function GiftUnwrap({ onDismiss }: Props) {
         cutRibbon();
       }
     }
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [cutRibbon, phase]);
-
 
   const showRibbon = phase === "ribbon";
   const isOpening = phase === "opening" || phase === "opened";
@@ -78,9 +78,11 @@ export default function GiftUnwrap({ onDismiss }: Props) {
         className="absolute top-0 left-0 right-0 z-40"
         style={{
           height: "clamp(60px, 10vh, 100px)",
-          background: "linear-gradient(to bottom, #480000, #300000 60%, #200000)",
+          background:
+            "linear-gradient(to bottom, #480000, #300000 60%, #200000)",
           borderBottom: "5px solid #d4af37",
-          boxShadow: "0 8px 40px rgba(0,0,0,0.9), 0 4px 12px rgba(212,175,55,0.15)",
+          boxShadow:
+            "0 8px 40px rgba(0,0,0,0.9), 0 4px 12px rgba(212,175,55,0.15)",
           opacity: isOpening ? 0 : 1,
           transition: "opacity 2s ease 3s",
         }}
@@ -102,7 +104,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
         className="absolute top-0 left-0 bottom-0 z-30"
         style={{
           width: isOpening ? "0%" : "50%",
-          transition: "width 4.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
+          transition: "width 15s cubic-bezier(0.22, 0.8, 0.36, 1)",
           overflow: "hidden",
         }}
       >
@@ -112,7 +114,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             top: 0,
             left: 0,
             bottom: 0,
-            width: "50vw", // keep content full half-width so the fabric compresses
+            width: "50vw",
             background: `
               linear-gradient(90deg,
                 #3a0000 0%, #5a0000 8%, #3a0000 16%,
@@ -123,11 +125,10 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             boxShadow:
               "inset -30px 0 60px rgba(0,0,0,0.7), 15px 0 50px rgba(0,0,0,0.9)",
             borderRight: isOpening ? "5px solid #d4af37" : "none",
-            // Rounded gathering on the inner edge
             borderTopRightRadius: isOpening ? "40% 15%" : "0",
             borderBottomRightRadius: isOpening ? "40% 15%" : "0",
             transition:
-              "border-top-right-radius 4.5s ease, border-bottom-right-radius 4.5s ease",
+              "border-top-right-radius 15s ease, border-bottom-right-radius 15s ease",
           }}
         >
           {/* Vertical fabric fold lines */}
@@ -139,6 +140,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
               opacity: 0.6,
             }}
           />
+
           {/* Sheen highlight */}
           <div
             className="absolute inset-0"
@@ -155,7 +157,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
         className="absolute top-0 right-0 bottom-0 z-30"
         style={{
           width: isOpening ? "0%" : "50%",
-          transition: "width 4.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
+          transition: "width 15s cubic-bezier(0.22, 0.8, 0.36, 1)",
           overflow: "hidden",
         }}
       >
@@ -179,9 +181,10 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             borderTopLeftRadius: isOpening ? "40% 15%" : "0",
             borderBottomLeftRadius: isOpening ? "40% 15%" : "0",
             transition:
-              "border-top-left-radius 4.5s ease, border-bottom-left-radius 4.5s ease",
+              "border-top-left-radius 15s ease, border-bottom-left-radius 15s ease",
           }}
         >
+          {/* Vertical fabric fold lines */}
           <div
             className="absolute inset-0"
             style={{
@@ -190,6 +193,8 @@ export default function GiftUnwrap({ onDismiss }: Props) {
               opacity: 0.6,
             }}
           />
+
+          {/* Sheen highlight */}
           <div
             className="absolute inset-0"
             style={{
@@ -235,6 +240,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             transitionDuration: "1s, 0.8s",
           }}
         />
+
         {/* Ribbon right half */}
         <div
           style={{
@@ -258,6 +264,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             transitionDuration: "1s, 0.8s",
           }}
         />
+
         {/* Ribbon bow / centre knot */}
         <div
           style={{
@@ -273,8 +280,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
           🎀
         </div>
       </div>
-
-
 
       {/* ─── Prompt text ─── */}
       <div
