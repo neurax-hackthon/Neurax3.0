@@ -25,10 +25,7 @@ type Props = {
 
 export default function GiftUnwrap({ onDismiss }: Props) {
   const [phase, setPhase] = useState<Phase>("ribbon");
-
-  /* ── Ribbon-cutting via mouse / touch drag ── */
-  const ribbonRef = useRef<HTMLDivElement>(null);
-  const dragStartXRef = useRef<number | null>(null);
+  const [cutProgress, setCutProgress] = useState(0); // 0-1 visual feedback
 
   const cutRibbon = useCallback(() => {
     setPhase((prev) => (prev === "ribbon" ? "cutting" : prev));
@@ -65,25 +62,99 @@ export default function GiftUnwrap({ onDismiss }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [cutRibbon, phase]);
 
-  // Mouse / touch drag-to-cut on the ribbon
-  const handlePointerDown = (e: React.PointerEvent) => {
+  /* ── Desktop: mousedown → mousemove → mouseup on the whole window ── */
+  useEffect(() => {
     if (phase !== "ribbon") return;
-    dragStartXRef.current = e.clientX;
-  };
 
-  const handlePointerMove = (e: React.PointerEvent) => {
-    if (phase !== "ribbon" || dragStartXRef.current === null) return;
-    const dragDistance = Math.abs(e.clientX - dragStartXRef.current);
-    // Cut when dragged > 80px across the ribbon
-    if (dragDistance > 80) {
-      dragStartXRef.current = null;
-      cutRibbon();
+    let startX: number | null = null;
+    let startY: number | null = null;
+    const RIBBON_ZONE = 120; // px from centre — generous hit zone
+    const CUT_DISTANCE = 60; // px horizontal drag to cut
+
+    function isInRibbonZone(y: number) {
+      const centre = window.innerHeight / 2;
+      return Math.abs(y - centre) < RIBBON_ZONE;
     }
-  };
 
-  const handlePointerUp = () => {
-    dragStartXRef.current = null;
-  };
+    function onMouseDown(e: MouseEvent) {
+      if (!isInRibbonZone(e.clientY)) return;
+      startX = e.clientX;
+      startY = e.clientY;
+    }
+
+    function onMouseMove(e: MouseEvent) {
+      if (startX === null) return;
+      const dx = Math.abs(e.clientX - startX);
+      setCutProgress(Math.min(dx / CUT_DISTANCE, 1));
+      if (dx >= CUT_DISTANCE) {
+        startX = null;
+        startY = null;
+        setCutProgress(0);
+        cutRibbon();
+      }
+    }
+
+    function onMouseUp() {
+      startX = null;
+      startY = null;
+      setCutProgress(0);
+    }
+
+    window.addEventListener("mousedown", onMouseDown);
+    window.addEventListener("mousemove", onMouseMove);
+    window.addEventListener("mouseup", onMouseUp);
+    return () => {
+      window.removeEventListener("mousedown", onMouseDown);
+      window.removeEventListener("mousemove", onMouseMove);
+      window.removeEventListener("mouseup", onMouseUp);
+    };
+  }, [phase, cutRibbon]);
+
+  /* ── Mobile: touchstart → touchmove (no need to hold, just swipe) ── */
+  useEffect(() => {
+    if (phase !== "ribbon") return;
+
+    let startX: number | null = null;
+    const RIBBON_ZONE = 140; // px — even more generous on touch
+    const CUT_DISTANCE = 50; // px — lower threshold for touch
+
+    function isInRibbonZone(y: number) {
+      const centre = window.innerHeight / 2;
+      return Math.abs(y - centre) < RIBBON_ZONE;
+    }
+
+    function onTouchStart(e: TouchEvent) {
+      const touch = e.touches[0];
+      if (!isInRibbonZone(touch.clientY)) return;
+      startX = touch.clientX;
+    }
+
+    function onTouchMove(e: TouchEvent) {
+      if (startX === null) return;
+      const touch = e.touches[0];
+      const dx = Math.abs(touch.clientX - startX);
+      setCutProgress(Math.min(dx / CUT_DISTANCE, 1));
+      if (dx >= CUT_DISTANCE) {
+        startX = null;
+        setCutProgress(0);
+        cutRibbon();
+      }
+    }
+
+    function onTouchEnd() {
+      startX = null;
+      setCutProgress(0);
+    }
+
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchmove", onTouchMove, { passive: true });
+    window.addEventListener("touchend", onTouchEnd);
+    return () => {
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchmove", onTouchMove);
+      window.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [phase, cutRibbon]);
 
   const showRibbon = phase === "ribbon";
   const isOpening = phase === "opening" || phase === "opened";
@@ -92,7 +163,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center select-none overflow-hidden"
-      style={{ cursor: showRibbon ? "crosshair" : "default" }}
+      style={{ cursor: showRibbon ? "crosshair" : "default", touchAction: "none" }}
     >
       {/* ─── Top Valance (theatre pelmet) ─── */}
       <div
@@ -223,21 +294,26 @@ export default function GiftUnwrap({ onDismiss }: Props) {
 
       {/* ─── Ribbon across the curtains ─── */}
       <div
-        ref={ribbonRef}
         className="absolute z-40 flex items-center justify-center"
         style={{
           left: 0,
           right: 0,
           top: "50%",
-          height: "60px",
+          height: "120px",
           transform: "translateY(-50%)",
-          pointerEvents: showRibbon ? "auto" : "none",
-          cursor: showRibbon ? "crosshair" : "default",
+          pointerEvents: "none",
         }}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
       >
+        {/* Cut progress glow */}
+        {showRibbon && cutProgress > 0 && (
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(ellipse at center, rgba(255,215,0,${cutProgress * 0.4}) 0%, transparent 70%)`,
+              transition: "background 0.05s",
+            }}
+          />
+        )}
         {/* Ribbon left half */}
         <div
           style={{
@@ -327,7 +403,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             boxShadow: "0 0 30px rgba(201,163,95,0.2)",
           }}
         >
-          ✂️ Drag across the ribbon or press Enter
+          ✂️ Swipe across the ribbon or press Enter
         </div>
       </div>
 
