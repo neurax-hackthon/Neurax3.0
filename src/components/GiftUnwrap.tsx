@@ -67,7 +67,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
     if (phase !== "ribbon") return;
 
     let startX: number | null = null;
-    let startY: number | null = null;
     const RIBBON_ZONE = 120; // px from centre — generous hit zone
     const CUT_DISTANCE = 60; // px horizontal drag to cut
 
@@ -79,7 +78,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
     function onMouseDown(e: MouseEvent) {
       if (!isInRibbonZone(e.clientY)) return;
       startX = e.clientX;
-      startY = e.clientY;
     }
 
     function onMouseMove(e: MouseEvent) {
@@ -88,7 +86,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
       setCutProgress(Math.min(dx / CUT_DISTANCE, 1));
       if (dx >= CUT_DISTANCE) {
         startX = null;
-        startY = null;
         setCutProgress(0);
         cutRibbon();
       }
@@ -96,7 +93,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
 
     function onMouseUp() {
       startX = null;
-      startY = null;
       setCutProgress(0);
     }
 
