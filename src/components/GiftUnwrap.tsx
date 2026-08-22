@@ -1,378 +1,426 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 
 /**
- * GiftUnwrap — a fullscreen gift box inauguration animation.
+ * Curtain Raiser — a fullscreen inauguration animation.
  *
- * The gift appears wrapped with a ribbon. On press (Enter / tap),
- * the ribbon flies off, the lid lifts, and a golden glow reveals
- * a personalized message inside.
+ * Phase 1 ("ribbon"): Two luxurious curtains cover the screen with a golden
+ *   ribbon stretched across the centre. The user can cut the ribbon by dragging
+ *   their mouse/finger across it OR pressing Enter.
  *
- * Usage: render <GiftUnwrap /> as a route or overlay.
- * To dismiss after reveal, the user taps anywhere or presses Enter again.
+ * Phase 2 ("cutting"): The ribbon snaps and falls away (0.8s).
+ *
+ * Phase 3 ("opening"): The curtains slowly gather and slide apart with
+ *   realistic rounded fabric bunching, revealing the IntroScreen behind them.
+ *   Confetti / flakes rain down. After 5 seconds the overlay auto-dismisses.
  */
 
-type Phase = "wrapped" | "unwrapping" | "revealed";
+type Phase = "ribbon" | "cutting" | "opening" | "opened";
 
 type Props = {
-  /** Recipient name */
   recipientName?: string;
-  /** Title inside the gift */
   revealTitle?: string;
-  /** Subtitle / message inside the gift */
   revealMessage?: string;
-  /** Called when the user dismisses the revealed state */
   onDismiss?: () => void;
 };
 
-export default function GiftUnwrap({
-  recipientName = "Respected Chairman",
-  revealTitle = "NeuraX 3.0",
-  revealMessage = "With gratitude and respect,\nthe NeuraX Team invites you\nto inaugurate HACKATHON 3.0",
-  onDismiss,
-}: Props) {
-  const [phase, setPhase] = useState<Phase>("wrapped");
+export default function GiftUnwrap({ onDismiss }: Props) {
+  const [phase, setPhase] = useState<Phase>("ribbon");
 
-  const advance = useCallback(() => {
-    setPhase((prev) => {
-      if (prev === "wrapped") return "unwrapping";
-      if (prev === "unwrapping") return "revealed";
-      if (prev === "revealed" && onDismiss) onDismiss();
-      return prev;
-    });
-  }, [onDismiss]);
+  /* ── Ribbon-cutting via mouse / touch drag ── */
+  const ribbonRef = useRef<HTMLDivElement>(null);
+  const dragStartXRef = useRef<number | null>(null);
 
-  // After unwrapping starts, auto-advance to revealed after 1.8s
+  const cutRibbon = useCallback(() => {
+    setPhase((prev) => (prev === "ribbon" ? "cutting" : prev));
+  }, []);
+
+  // After ribbon is cut, start opening curtains
   useEffect(() => {
-    if (phase === "unwrapping") {
-      const t = setTimeout(() => setPhase("revealed"), 1800);
+    if (phase === "cutting") {
+      const t = setTimeout(() => setPhase("opening"), 800);
       return () => clearTimeout(t);
     }
   }, [phase]);
 
-  // Key / tap listener
+  // After curtains finish opening, dismiss after 5s total
+  useEffect(() => {
+    if (phase === "opening") {
+      const t = setTimeout(() => {
+        setPhase("opened");
+        if (onDismiss) onDismiss();
+      }, 5000);
+      return () => clearTimeout(t);
+    }
+  }, [phase, onDismiss]);
+
+  // Keyboard listener — Enter or Space to cut
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
-      if (e.key === "Enter" || e.key === " ") {
+      if ((e.key === "Enter" || e.key === " ") && phase === "ribbon") {
         e.preventDefault();
-        advance();
+        cutRibbon();
       }
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [advance]);
+  }, [cutRibbon, phase]);
 
-  const isWrapped = phase === "wrapped";
-  const isUnwrapping = phase === "unwrapping";
-  const isRevealed = phase === "revealed";
+  // Mouse / touch drag-to-cut on the ribbon
+  const handlePointerDown = (e: React.PointerEvent) => {
+    if (phase !== "ribbon") return;
+    dragStartXRef.current = e.clientX;
+  };
+
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (phase !== "ribbon" || dragStartXRef.current === null) return;
+    const dragDistance = Math.abs(e.clientX - dragStartXRef.current);
+    // Cut when dragged > 80px across the ribbon
+    if (dragDistance > 80) {
+      dragStartXRef.current = null;
+      cutRibbon();
+    }
+  };
+
+  const handlePointerUp = () => {
+    dragStartXRef.current = null;
+  };
+
+  const showRibbon = phase === "ribbon";
+  const isOpening = phase === "opening" || phase === "opened";
+  const ribbonCut = phase !== "ribbon";
 
   return (
     <div
-      onClick={advance}
-      className="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer select-none overflow-hidden"
-      style={{
-        background: isRevealed
-          ? "radial-gradient(ellipse at center, #1a1408 0%, #060506 80%)"
-          : "radial-gradient(ellipse at center, #0d0b08 0%, #060506 80%)",
-        transition: "background 1s ease",
-      }}
+      className="fixed inset-0 z-[100] flex items-center justify-center select-none overflow-hidden"
+      style={{ cursor: showRibbon ? "crosshair" : "default" }}
     >
-      {/* Ambient particles */}
-      {isRevealed && <Particles />}
-
-      {/* Gift scene */}
+      {/* ─── Top Valance (theatre pelmet) ─── */}
       <div
-        className="relative flex flex-col items-center"
-        style={{ perspective: "1200px" }}
+        className="absolute top-0 left-0 right-0 z-40"
+        style={{
+          height: "clamp(60px, 10vh, 100px)",
+          background: "linear-gradient(to bottom, #480000, #300000 60%, #200000)",
+          borderBottom: "5px solid #d4af37",
+          boxShadow: "0 8px 40px rgba(0,0,0,0.9), 0 4px 12px rgba(212,175,55,0.15)",
+          opacity: isOpening ? 0 : 1,
+          transition: "opacity 2s ease 3s",
+        }}
       >
-        {/* ─── Gift box body ─── */}
+        {/* Scalloped drape pattern */}
         <div
-          className="relative"
+          className="absolute bottom-0 left-0 right-0"
           style={{
-            width: "min(320px, 80vw)",
-            height: "min(260px, 65vw)",
+            height: "20px",
+            background:
+              "repeating-conic-gradient(#480000 0% 25%, transparent 0% 50%) 0 0 / 40px 20px",
+            opacity: 0.5,
+          }}
+        />
+      </div>
+
+      {/* ─── Left Curtain ─── */}
+      <div
+        className="absolute top-0 left-0 bottom-0 z-30"
+        style={{
+          width: isOpening ? "0%" : "50%",
+          transition: "width 4.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
+          overflow: "hidden",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            bottom: 0,
+            width: "50vw", // keep content full half-width so the fabric compresses
+            background: `
+              linear-gradient(90deg,
+                #3a0000 0%, #5a0000 8%, #3a0000 16%,
+                #5a0000 24%, #3a0000 32%, #520000 40%,
+                #3a0000 48%, #5a0000 56%, #3a0000 64%,
+                #520000 72%, #3a0000 80%, #5a0000 88%,
+                #4a0000 100%)`,
+            boxShadow:
+              "inset -30px 0 60px rgba(0,0,0,0.7), 15px 0 50px rgba(0,0,0,0.9)",
+            borderRight: isOpening ? "5px solid #d4af37" : "none",
+            // Rounded gathering on the inner edge
+            borderTopRightRadius: isOpening ? "40% 15%" : "0",
+            borderBottomRightRadius: isOpening ? "40% 15%" : "0",
+            transition:
+              "border-top-right-radius 4.5s ease, border-bottom-right-radius 4.5s ease",
           }}
         >
-          {/* Box base */}
+          {/* Vertical fabric fold lines */}
           <div
+            className="absolute inset-0"
             style={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: "60%",
-              borderRadius: "8px",
-              background: "linear-gradient(145deg, #2a1f10, #1a140a)",
-              border: "1px solid rgba(201,163,95,0.25)",
-              boxShadow:
-                "0 8px 40px rgba(0,0,0,0.6), inset 0 1px 0 rgba(201,163,95,0.1)",
-              transition: "box-shadow 1s ease",
-              ...(isRevealed && {
-                boxShadow:
-                  "0 8px 40px rgba(201,163,95,0.2), 0 0 80px rgba(233,201,138,0.15), inset 0 1px 0 rgba(201,163,95,0.2)",
-              }),
+              background:
+                "repeating-linear-gradient(90deg, transparent, transparent 25px, rgba(0,0,0,0.3) 26px, transparent 28px)",
+              opacity: 0.6,
             }}
-          >
-            {/* Vertical ribbon on box */}
-            <div
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: 0,
-                bottom: 0,
-                width: "28px",
-                transform: "translateX(-50%)",
-                background:
-                  "linear-gradient(90deg, #c9a35f 0%, #e9c98a 50%, #c9a35f 100%)",
-                opacity: isUnwrapping || isRevealed ? 0 : 0.9,
-                transition: "opacity 0.6s ease",
-              }}
-            />
-
-            {/* Inner glow when revealed */}
-            {isRevealed && (
-              <div
-                style={{
-                  position: "absolute",
-                  inset: "8px",
-                  borderRadius: "4px",
-                  background:
-                    "radial-gradient(ellipse at center, rgba(233,201,138,0.12) 0%, transparent 70%)",
-                  animation: "pulse-slow 3s ease-in-out infinite",
-                }}
-              />
-            )}
-          </div>
-
-          {/* ─── Lid ─── */}
+          />
+          {/* Sheen highlight */}
           <div
+            className="absolute inset-0"
             style={{
-              position: "absolute",
-              top: 0,
-              left: "-4%",
-              right: "-4%",
-              height: "42%",
-              borderRadius: "8px 8px 4px 4px",
-              background: "linear-gradient(145deg, #342710, #1e1608)",
-              border: "1px solid rgba(201,163,95,0.3)",
-              boxShadow:
-                "0 4px 20px rgba(0,0,0,0.5), inset 0 1px 0 rgba(233,201,138,0.15)",
-              transformOrigin: "top center",
-              transition: "transform 1.2s cubic-bezier(0.25,0.1,0.25,1), opacity 0.8s ease",
-              ...(isUnwrapping || isRevealed
-                ? {
-                    transform: "rotateX(-110deg) translateY(-30px)",
-                    opacity: isRevealed ? 0 : 0.7,
-                  }
-                : {
-                    transform: "rotateX(0deg)",
-                  }),
+              background:
+                "linear-gradient(120deg, transparent 30%, rgba(255,200,200,0.06) 45%, transparent 55%)",
             }}
-          >
-            {/* Horizontal ribbon on lid */}
-            <div
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: 0,
-                right: 0,
-                height: "28px",
-                transform: "translateY(-50%)",
-                background:
-                  "linear-gradient(180deg, #c9a35f 0%, #e9c98a 50%, #c9a35f 100%)",
-                opacity: isUnwrapping || isRevealed ? 0 : 0.9,
-                transition: "opacity 0.5s ease",
-              }}
-            />
-
-            {/* Vertical ribbon on lid */}
-            <div
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: 0,
-                bottom: 0,
-                width: "28px",
-                transform: "translateX(-50%)",
-                background:
-                  "linear-gradient(90deg, #c9a35f 0%, #e9c98a 50%, #c9a35f 100%)",
-                opacity: isUnwrapping || isRevealed ? 0 : 0.9,
-                transition: "opacity 0.5s ease",
-              }}
-            />
-
-            {/* Ribbon bow */}
-            <div
-              style={{
-                position: "absolute",
-                left: "50%",
-                top: "50%",
-                transform: `translate(-50%, -50%) scale(${isUnwrapping || isRevealed ? 2 : 1})`,
-                opacity: isUnwrapping || isRevealed ? 0 : 1,
-                transition: "all 0.8s cubic-bezier(0.25,0.1,0.25,1)",
-                fontSize: "36px",
-                filter: "drop-shadow(0 2px 8px rgba(0,0,0,0.4))",
-              }}
-            >
-              🎀
-            </div>
-          </div>
-
-          {/* ─── Revealed content inside the box ─── */}
-          <div
-            style={{
-              position: "absolute",
-              bottom: "8%",
-              left: "8%",
-              right: "8%",
-              top: "30%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              opacity: isRevealed ? 1 : 0,
-              transform: isRevealed ? "translateY(0)" : "translateY(15px)",
-              transition: "opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s",
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "'Cormorant Garamond', 'Times New Roman', serif",
-                fontSize: "clamp(28px, 7vw, 44px)",
-                fontWeight: 700,
-                color: "#e9c98a",
-                lineHeight: 1.1,
-                textShadow: "0 0 30px rgba(233,201,138,0.5)",
-              }}
-            >
-              {revealTitle}
-            </span>
-            <span
-              style={{
-                fontFamily: "'Manrope', system-ui, sans-serif",
-                fontSize: "10px",
-                letterSpacing: "0.3em",
-                textTransform: "uppercase",
-                color: "#c9a35f",
-                marginTop: "8px",
-                fontWeight: 600,
-              }}
-            >
-              HACKATHON 3.0
-            </span>
-          </div>
+          />
         </div>
       </div>
 
-      {/* ─── Text content below the box ─── */}
+      {/* ─── Right Curtain ─── */}
       <div
-        className="flex flex-col items-center text-center mt-10 px-6"
+        className="absolute top-0 right-0 bottom-0 z-30"
         style={{
-          opacity: isRevealed ? 1 : isWrapped ? 1 : 0.3,
-          transition: "opacity 0.8s ease 0.5s",
+          width: isOpening ? "0%" : "50%",
+          transition: "width 4.5s cubic-bezier(0.22, 0.8, 0.36, 1)",
+          overflow: "hidden",
         }}
       >
-        {isWrapped && (
-          <>
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', 'Times New Roman', serif",
-                fontSize: "clamp(18px, 5vw, 26px)",
-                color: "#f2ede3",
-                fontWeight: 500,
-                marginBottom: "6px",
-              }}
-            >
-              Dear {recipientName}
-            </p>
-            <p
-              style={{
-                fontFamily: "'Manrope', system-ui, sans-serif",
-                fontSize: "13px",
-                color: "#a9a49a",
-                marginBottom: "28px",
-              }}
-            >
-              A token of gratitude awaits you
-            </p>
-            <div
-              className="animate-pulse"
-              style={{
-                fontFamily: "'Manrope', system-ui, sans-serif",
-                fontSize: "11px",
-                letterSpacing: "0.25em",
-                textTransform: "uppercase",
-                color: "#c9a35f",
-                padding: "10px 24px",
-                border: "1px solid rgba(201,163,95,0.3)",
-                borderRadius: "999px",
-              }}
-            >
-              Press Enter or Tap to Unwrap
-            </div>
-          </>
-        )}
-
-        {isRevealed && (
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            right: 0,
+            bottom: 0,
+            width: "50vw",
+            background: `
+              linear-gradient(-90deg,
+                #3a0000 0%, #5a0000 8%, #3a0000 16%,
+                #5a0000 24%, #3a0000 32%, #520000 40%,
+                #3a0000 48%, #5a0000 56%, #3a0000 64%,
+                #520000 72%, #3a0000 80%, #5a0000 88%,
+                #4a0000 100%)`,
+            boxShadow:
+              "inset 30px 0 60px rgba(0,0,0,0.7), -15px 0 50px rgba(0,0,0,0.9)",
+            borderLeft: isOpening ? "5px solid #d4af37" : "none",
+            borderTopLeftRadius: isOpening ? "40% 15%" : "0",
+            borderBottomLeftRadius: isOpening ? "40% 15%" : "0",
+            transition:
+              "border-top-left-radius 4.5s ease, border-bottom-left-radius 4.5s ease",
+          }}
+        >
           <div
+            className="absolute inset-0"
             style={{
-              opacity: 1,
-              animation: "fade-in 1s ease forwards",
+              background:
+                "repeating-linear-gradient(-90deg, transparent, transparent 25px, rgba(0,0,0,0.3) 26px, transparent 28px)",
+              opacity: 0.6,
             }}
-          >
-            <p
-              style={{
-                fontFamily: "'Cormorant Garamond', 'Times New Roman', serif",
-                fontSize: "clamp(16px, 4vw, 22px)",
-                color: "#f2ede3",
-                fontWeight: 500,
-                whiteSpace: "pre-line",
-                lineHeight: 1.8,
-                marginBottom: "20px",
-              }}
-            >
-              {revealMessage}
-            </p>
-            <p
-              style={{
-                fontFamily: "'Manrope', system-ui, sans-serif",
-                fontSize: "11px",
-                letterSpacing: "0.2em",
-                textTransform: "uppercase",
-                color: "#6fd8d1",
-              }}
-            >
-              September 19–20, 2026 · CMR Technical Campus
-            </p>
-          </div>
-        )}
+          />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(-120deg, transparent 30%, rgba(255,200,200,0.06) 45%, transparent 55%)",
+            }}
+          />
+        </div>
       </div>
+
+      {/* ─── Ribbon across the curtains ─── */}
+      <div
+        ref={ribbonRef}
+        className="absolute z-40 flex items-center justify-center"
+        style={{
+          left: 0,
+          right: 0,
+          top: "50%",
+          height: "60px",
+          transform: "translateY(-50%)",
+          pointerEvents: showRibbon ? "auto" : "none",
+          cursor: showRibbon ? "crosshair" : "default",
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+      >
+        {/* Ribbon left half */}
+        <div
+          style={{
+            position: "absolute",
+            left: 0,
+            right: "50%",
+            top: "50%",
+            height: "36px",
+            transform: ribbonCut
+              ? "translateY(-50%) rotate(8deg) translateY(120vh)"
+              : "translateY(-50%)",
+            background:
+              "linear-gradient(180deg, #d4af37 0%, #f5d76e 30%, #d4af37 60%, #b8941f 100%)",
+            boxShadow:
+              "0 2px 12px rgba(212,175,55,0.5), inset 0 1px 0 rgba(255,255,255,0.3)",
+            transition: ribbonCut
+              ? "transform 1s cubic-bezier(0.4, 0, 1, 1)"
+              : "none",
+            opacity: ribbonCut ? 0 : 1,
+            transitionProperty: "transform, opacity",
+            transitionDuration: "1s, 0.8s",
+          }}
+        />
+        {/* Ribbon right half */}
+        <div
+          style={{
+            position: "absolute",
+            left: "50%",
+            right: 0,
+            top: "50%",
+            height: "36px",
+            transform: ribbonCut
+              ? "translateY(-50%) rotate(-8deg) translateY(120vh)"
+              : "translateY(-50%)",
+            background:
+              "linear-gradient(180deg, #d4af37 0%, #f5d76e 30%, #d4af37 60%, #b8941f 100%)",
+            boxShadow:
+              "0 2px 12px rgba(212,175,55,0.5), inset 0 1px 0 rgba(255,255,255,0.3)",
+            transition: ribbonCut
+              ? "transform 1s cubic-bezier(0.4, 0, 1, 1)"
+              : "none",
+            opacity: ribbonCut ? 0 : 1,
+            transitionProperty: "transform, opacity",
+            transitionDuration: "1s, 0.8s",
+          }}
+        />
+        {/* Ribbon bow / centre knot */}
+        <div
+          style={{
+            position: "relative",
+            zIndex: 2,
+            fontSize: "40px",
+            filter: "drop-shadow(0 2px 10px rgba(0,0,0,0.5))",
+            transform: ribbonCut ? "scale(2) rotate(20deg)" : "scale(1)",
+            opacity: ribbonCut ? 0 : 1,
+            transition: "all 0.6s ease",
+          }}
+        >
+          🎀
+        </div>
+      </div>
+
+      {/* ─── Scissors icon following mouse on ribbon ─── */}
+      {showRibbon && <ScissorsHint />}
+
+      {/* ─── Prompt text ─── */}
+      <div
+        className="absolute bottom-12 left-0 right-0 z-50 flex flex-col items-center pointer-events-none"
+        style={{
+          opacity: showRibbon ? 1 : 0,
+          transition: "opacity 0.6s ease",
+        }}
+      >
+        <div
+          className="animate-pulse-slow"
+          style={{
+            fontFamily: "'Manrope', system-ui, sans-serif",
+            fontSize: "13px",
+            letterSpacing: "0.25em",
+            textTransform: "uppercase",
+            color: "#e9c98a",
+            padding: "14px 28px",
+            border: "1px solid rgba(201,163,95,0.4)",
+            borderRadius: "999px",
+            background: "rgba(6,5,6,0.85)",
+            backdropFilter: "blur(6px)",
+            boxShadow: "0 0 30px rgba(201,163,95,0.2)",
+          }}
+        >
+          ✂️ Drag across the ribbon or press Enter
+        </div>
+      </div>
+
+      {/* ─── Confetti ─── */}
+      {(phase === "opening" || phase === "opened") && <Confetti />}
     </div>
   );
 }
 
-/* Floating golden particles that appear on reveal */
-function Particles() {
+/* ─── Scissors hint that follows mouse position on the ribbon area ─── */
+function ScissorsHint() {
+  const [pos, setPos] = useState({ x: 0, y: 0, visible: false });
+
+  useEffect(() => {
+    function onMove(e: MouseEvent) {
+      setPos({ x: e.clientX, y: e.clientY, visible: true });
+    }
+    function onLeave() {
+      setPos((p) => ({ ...p, visible: false }));
+    }
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseleave", onLeave);
+    return () => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseleave", onLeave);
+    };
+  }, []);
+
+  if (!pos.visible) return null;
+
   return (
-    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-      {Array.from({ length: 18 }).map((_, i) => (
+    <div
+      className="pointer-events-none fixed z-[200]"
+      style={{
+        left: pos.x - 16,
+        top: pos.y - 16,
+        fontSize: "28px",
+        transform: "rotate(-45deg)",
+        transition: "left 0.05s, top 0.05s",
+        filter: "drop-shadow(0 0 6px rgba(212,175,55,0.6))",
+      }}
+    >
+      ✂️
+    </div>
+  );
+}
+
+/* ─── Confetti (lots of falling flakes) ─── */
+function Confetti() {
+  // Pre-compute particles once to avoid re-renders changing them
+  const particles = useRef(
+    Array.from({ length: 300 }).map((_, i) => ({
+      size: Math.random() * 10 + 4,
+      color:
+        i % 7 === 0
+          ? "#6fd8d1"
+          : i % 5 === 0
+          ? "#f2ede3"
+          : i % 3 === 0
+          ? "#e9c98a"
+          : i % 2 === 0
+          ? "#c9a35f"
+          : "#ffffff",
+      left: Math.random() * 100,
+      duration: Math.random() * 4 + 3,
+      delay: Math.random() * 2.5,
+      rotation: Math.random() * 360,
+      isCircle: Math.random() > 0.5,
+      glow: Math.random() * 8 + 2,
+      opacity: Math.random() * 0.6 + 0.4,
+    }))
+  ).current;
+
+  return (
+    <div
+      className="pointer-events-none absolute inset-0 overflow-hidden z-20"
+      aria-hidden
+    >
+      {particles.map((p, i) => (
         <div
           key={i}
           style={{
             position: "absolute",
-            width: `${3 + (i % 4) * 2}px`,
-            height: `${3 + (i % 4) * 2}px`,
-            borderRadius: "50%",
-            background:
-              i % 3 === 0
-                ? "#e9c98a"
-                : i % 3 === 1
-                ? "#c9a35f"
-                : "#6fd8d1",
-            left: `${5 + (i * 5.2) % 90}%`,
-            bottom: "-10px",
-            opacity: 0.6 + (i % 3) * 0.15,
-            animation: `particle-rise ${3 + (i % 5) * 0.8}s ease-out ${i * 0.15}s infinite`,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            borderRadius: p.isCircle ? "50%" : "2px",
+            background: p.color,
+            left: `${p.left}%`,
+            top: "-20px",
+            opacity: p.opacity,
+            animation: `particle-fall ${p.duration}s linear ${p.delay}s infinite`,
+            transform: `rotate(${p.rotation}deg)`,
+            boxShadow: `0 0 ${p.glow}px ${p.color}`,
           }}
         />
       ))}

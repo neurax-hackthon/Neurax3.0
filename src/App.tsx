@@ -35,21 +35,19 @@ function App() {
     }
   }, [introDone]);
 
-  // Gift inauguration mode — fullscreen overlay
-  if (giftMode) {
-    return (
-      <GiftUnwrap
-        onDismiss={() => {
-          // Remove ?gift from URL and show the main site
-          window.history.replaceState({}, "", window.location.pathname);
-          setGiftMode(false);
-        }}
-      />
-    );
-  }
-
   return (
     <div className="grain">
+      {/* Gift inauguration mode — curtain overlay on top of IntroScreen */}
+      {giftMode && (
+        <GiftUnwrap
+          onDismiss={() => {
+            // Remove ?gift from URL and remove the curtain overlay
+            window.history.replaceState({}, "", window.location.pathname);
+            setGiftMode(false);
+          }}
+        />
+      )}
+
       {!introDone && <IntroScreen onEnter={() => setIntroDone(true)} />}
 
       <div id="top" />
