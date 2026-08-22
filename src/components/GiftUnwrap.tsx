@@ -110,23 +110,20 @@ export default function GiftUnwrap({ onDismiss }: Props) {
     };
   }, [phase, cutRibbon]);
 
-  /* ── Mobile: touchstart → touchmove (no need to hold, just swipe) ── */
+  /* ── Mobile: any swipe or tap anywhere on screen cuts the ribbon ── */
   useEffect(() => {
     if (phase !== "ribbon") return;
 
     let startX: number | null = null;
-    const RIBBON_ZONE = 140; // px — even more generous on touch
-    const CUT_DISTANCE = 50; // px — lower threshold for touch
-
-    function isInRibbonZone(y: number) {
-      const centre = window.innerHeight / 2;
-      return Math.abs(y - centre) < RIBBON_ZONE;
-    }
+    let didSwipe = false;
+    const CUT_DISTANCE = 30; // px — very low threshold for touch swipe
 
     function onTouchStart(e: TouchEvent) {
       const touch = e.touches[0];
-      if (!isInRibbonZone(touch.clientY)) return;
       startX = touch.clientX;
+      didSwipe = false;
+      // Prevent browser from stealing the touch for scroll/navigation
+      e.preventDefault();
     }
 
     function onTouchMove(e: TouchEvent) {
@@ -135,20 +132,28 @@ export default function GiftUnwrap({ onDismiss }: Props) {
       const dx = Math.abs(touch.clientX - startX);
       setCutProgress(Math.min(dx / CUT_DISTANCE, 1));
       if (dx >= CUT_DISTANCE) {
+        didSwipe = true;
         startX = null;
         setCutProgress(0);
         cutRibbon();
       }
+      e.preventDefault();
     }
 
-    function onTouchEnd() {
+    function onTouchEnd(e: TouchEvent) {
+      // If the user tapped without swiping, also cut the ribbon
+      if (!didSwipe && startX !== null) {
+        cutRibbon();
+      }
       startX = null;
+      didSwipe = false;
       setCutProgress(0);
+      e.preventDefault();
     }
 
-    window.addEventListener("touchstart", onTouchStart, { passive: true });
-    window.addEventListener("touchmove", onTouchMove, { passive: true });
-    window.addEventListener("touchend", onTouchEnd);
+    window.addEventListener("touchstart", onTouchStart, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchend", onTouchEnd, { passive: false });
     return () => {
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
