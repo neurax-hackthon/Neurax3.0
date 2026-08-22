@@ -1,43 +1,43 @@
 import SectionHeading from "./SectionHeading";
 
-const DOMAIN_PRIZES = [
-  {
-    domain: "AI in Industry Automation",
-    icon: "🏭",
-    amount: "₹6,000",
-    description: "Best project driving intelligent automation and smart manufacturing.",
-    accent: "gold",
-    glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
-    border: "border-gold-bright/60",
-    tagColor: "text-gold-bright",
-    tagBorder: "border-gold-dim/50",
-    badge: "bg-gold-dim/10",
-  },
-  {
-    domain: "AI in Cybersecurity",
-    icon: "🛡️",
-    amount: "₹6,000",
-    description: "Best project advancing threat detection and resilient network defense.",
-    accent: "cyan",
-    glow: "shadow-[0_0_40px_rgba(100,220,220,0.25)]",
-    border: "border-cyan/50",
-    tagColor: "text-cyan",
-    tagBorder: "border-cyan/40",
-    badge: "bg-cyan/10",
-  },
-  {
-    domain: "AI in Smart Cities",
-    icon: "🏙️",
-    amount: "₹6,000",
-    description: "Best project shaping intelligent urban infrastructure and city services.",
-    accent: "gold",
-    glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
-    border: "border-gold-bright/60",
-    tagColor: "text-gold-bright",
-    tagBorder: "border-gold-dim/50",
-    badge: "bg-gold-dim/10",
-  },
-];
+// const DOMAIN_PRIZES = [
+//   {
+//     domain: "AI in Industry Automation",
+//     icon: "🏭",
+//     amount: "₹6,000",
+//     description: "Best project driving intelligent automation and smart manufacturing.",
+//     accent: "gold",
+//     glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
+//     border: "border-gold-bright/60",
+//     tagColor: "text-gold-bright",
+//     tagBorder: "border-gold-dim/50",
+//     badge: "bg-gold-dim/10",
+//   },
+//   {
+//     domain: "AI in Cybersecurity",
+//     icon: "🛡️",
+//     amount: "₹6,000",
+//     description: "Best project advancing threat detection and resilient network defense.",
+//     accent: "cyan",
+//     glow: "shadow-[0_0_40px_rgba(100,220,220,0.25)]",
+//     border: "border-cyan/50",
+//     tagColor: "text-cyan",
+//     tagBorder: "border-cyan/40",
+//     badge: "bg-cyan/10",
+//   },
+//   {
+//     domain: "AI in Smart Cities",
+//     icon: "🏙️",
+//     amount: "₹6,000",
+//     description: "Best project shaping intelligent urban infrastructure and city services.",
+//     accent: "gold",
+//     glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
+//     border: "border-gold-bright/60",
+//     tagColor: "text-gold-bright",
+//     tagBorder: "border-gold-dim/50",
+//     badge: "bg-gold-dim/10",
+//   },
+// ];
 
 export default function Winners() {
   return (
