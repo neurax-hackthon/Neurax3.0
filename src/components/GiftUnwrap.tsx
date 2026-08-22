@@ -4,17 +4,17 @@ import { useState, useCallback, useEffect, useRef } from "react";
  * Curtain Raiser — a fullscreen inauguration animation.
  *
  * Phase 1 ("ribbon"): Two luxurious curtains cover the screen with a golden
- *   ribbon stretched across the centre. The user can cut the ribbon by dragging
- *   their mouse/finger across it OR pressing Enter.
+ * ribbon stretched across the centre. The user can cut the ribbon by dragging
+ * their mouse/finger across it OR pressing Enter.
  *
  * Phase 2 ("cutting"): The ribbon snaps and falls away (0.8s).
  *
  * Phase 3 ("opening"): The curtains slowly gather and slide apart with
- *   realistic rounded fabric bunching, revealing the IntroScreen behind them.
- *   Confetti / flakes rain down. After 15 seconds the overlay auto-dismisses.
+ * realistic rounded fabric bunching, revealing the IntroScreen behind them.
+ * Confetti / flakes rain down. After 15 seconds the overlay auto-dismisses.
  */
 
-[L1] type Phase = "ribbon" | "cutting" | "opening" | "opened";
+type Phase = "ribbon" | "cutting" | "opening" | "opened";
 
 type Props = {
   recipientName?: string;
@@ -22,7 +22,6 @@ type Props = {
   revealMessage?: string;
   onDismiss?: () => void;
 };
-
 export default function GiftUnwrap({ onDismiss }: Props) {
   const [phase, setPhase] = useState<Phase>("ribbon");
 
