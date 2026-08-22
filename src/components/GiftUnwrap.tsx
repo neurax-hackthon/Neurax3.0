@@ -25,7 +25,6 @@ type Props = {
 
 export default function GiftUnwrap({ onDismiss }: Props) {
   const [phase, setPhase] = useState<Phase>("ribbon");
-  const [cutProgress, setCutProgress] = useState(0); // 0-1 visual feedback
 
   const cutRibbon = useCallback(() => {
     setPhase((prev) => (prev === "ribbon" ? "cutting" : prev));
@@ -62,100 +61,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [cutRibbon, phase]);
 
-  /* ── Desktop: mousedown → mousemove → mouseup on the whole window ── */
-  useEffect(() => {
-    if (phase !== "ribbon") return;
-
-    let startX: number | null = null;
-    const RIBBON_ZONE = 120; // px from centre — generous hit zone
-    const CUT_DISTANCE = 60; // px horizontal drag to cut
-
-    function isInRibbonZone(y: number) {
-      const centre = window.innerHeight / 2;
-      return Math.abs(y - centre) < RIBBON_ZONE;
-    }
-
-    function onMouseDown(e: MouseEvent) {
-      if (!isInRibbonZone(e.clientY)) return;
-      startX = e.clientX;
-    }
-
-    function onMouseMove(e: MouseEvent) {
-      if (startX === null) return;
-      const dx = Math.abs(e.clientX - startX);
-      setCutProgress(Math.min(dx / CUT_DISTANCE, 1));
-      if (dx >= CUT_DISTANCE) {
-        startX = null;
-        setCutProgress(0);
-        cutRibbon();
-      }
-    }
-
-    function onMouseUp() {
-      startX = null;
-      setCutProgress(0);
-    }
-
-    window.addEventListener("mousedown", onMouseDown);
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup", onMouseUp);
-    return () => {
-      window.removeEventListener("mousedown", onMouseDown);
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup", onMouseUp);
-    };
-  }, [phase, cutRibbon]);
-
-  /* ── Mobile: any swipe or tap anywhere on screen cuts the ribbon ── */
-  useEffect(() => {
-    if (phase !== "ribbon") return;
-
-    let startX: number | null = null;
-    let didSwipe = false;
-    const CUT_DISTANCE = 30; // px — very low threshold for touch swipe
-
-    function onTouchStart(e: TouchEvent) {
-      const touch = e.touches[0];
-      startX = touch.clientX;
-      didSwipe = false;
-      // Prevent browser from stealing the touch for scroll/navigation
-      e.preventDefault();
-    }
-
-    function onTouchMove(e: TouchEvent) {
-      if (startX === null) return;
-      const touch = e.touches[0];
-      const dx = Math.abs(touch.clientX - startX);
-      setCutProgress(Math.min(dx / CUT_DISTANCE, 1));
-      if (dx >= CUT_DISTANCE) {
-        didSwipe = true;
-        startX = null;
-        setCutProgress(0);
-        cutRibbon();
-      }
-      e.preventDefault();
-    }
-
-    function onTouchEnd(e: TouchEvent) {
-      // If the user tapped without swiping, also cut the ribbon
-      if (!didSwipe && startX !== null) {
-        cutRibbon();
-      }
-      startX = null;
-      didSwipe = false;
-      setCutProgress(0);
-      e.preventDefault();
-    }
-
-    window.addEventListener("touchstart", onTouchStart, { passive: false });
-    window.addEventListener("touchmove", onTouchMove, { passive: false });
-    window.addEventListener("touchend", onTouchEnd, { passive: false });
-    return () => {
-      window.removeEventListener("touchstart", onTouchStart);
-      window.removeEventListener("touchmove", onTouchMove);
-      window.removeEventListener("touchend", onTouchEnd);
-    };
-  }, [phase, cutRibbon]);
 
   const showRibbon = phase === "ribbon";
   const isOpening = phase === "opening" || phase === "opened";
@@ -164,7 +69,9 @@ export default function GiftUnwrap({ onDismiss }: Props) {
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center select-none overflow-hidden"
-      style={{ cursor: showRibbon ? "crosshair" : "default", touchAction: "none" }}
+      onClick={() => {
+        if (phase === "ribbon") cutRibbon();
+      }}
     >
       {/* ─── Top Valance (theatre pelmet) ─── */}
       <div
@@ -305,16 +212,6 @@ export default function GiftUnwrap({ onDismiss }: Props) {
           pointerEvents: "none",
         }}
       >
-        {/* Cut progress glow */}
-        {showRibbon && cutProgress > 0 && (
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `radial-gradient(ellipse at center, rgba(255,215,0,${cutProgress * 0.4}) 0%, transparent 70%)`,
-              transition: "background 0.05s",
-            }}
-          />
-        )}
         {/* Ribbon left half */}
         <div
           style={{
@@ -377,8 +274,7 @@ export default function GiftUnwrap({ onDismiss }: Props) {
         </div>
       </div>
 
-      {/* ─── Scissors icon following mouse on ribbon ─── */}
-      {showRibbon && <ScissorsHint />}
+
 
       {/* ─── Prompt text ─── */}
       <div
@@ -404,50 +300,12 @@ export default function GiftUnwrap({ onDismiss }: Props) {
             boxShadow: "0 0 30px rgba(201,163,95,0.2)",
           }}
         >
-          ✂️ Swipe across the ribbon or press Enter
+          Press Enter or tap to unwrap
         </div>
       </div>
 
       {/* ─── Confetti ─── */}
       {(phase === "opening" || phase === "opened") && <Confetti />}
-    </div>
-  );
-}
-
-/* ─── Scissors hint that follows mouse position on the ribbon area ─── */
-function ScissorsHint() {
-  const [pos, setPos] = useState({ x: 0, y: 0, visible: false });
-
-  useEffect(() => {
-    function onMove(e: MouseEvent) {
-      setPos({ x: e.clientX, y: e.clientY, visible: true });
-    }
-    function onLeave() {
-      setPos((p) => ({ ...p, visible: false }));
-    }
-    window.addEventListener("mousemove", onMove);
-    window.addEventListener("mouseleave", onLeave);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      window.removeEventListener("mouseleave", onLeave);
-    };
-  }, []);
-
-  if (!pos.visible) return null;
-
-  return (
-    <div
-      className="pointer-events-none fixed z-[200]"
-      style={{
-        left: pos.x - 16,
-        top: pos.y - 16,
-        fontSize: "28px",
-        transform: "rotate(-45deg)",
-        transition: "left 0.05s, top 0.05s",
-        filter: "drop-shadow(0 0 6px rgba(212,175,55,0.6))",
-      }}
-    >
-      ✂️
     </div>
   );
 }
