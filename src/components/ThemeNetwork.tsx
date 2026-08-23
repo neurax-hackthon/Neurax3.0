@@ -207,7 +207,7 @@ export default function ThemeNetwork() {
                         }),
                     left: "50%",
                     transform: "translateX(-50%)",
-                    fontSize: isActive ? "16px" : "13px",
+                    fontSize: isActive ? "12px" : "10px",
                     fontWeight: "bold",
                     letterSpacing: "0.18em",
                     color: isActive
