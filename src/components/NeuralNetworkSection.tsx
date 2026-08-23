@@ -356,12 +356,7 @@ function RevealCard({
         </div>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-3 divide-x divide-line/50 px-0 py-4">
-        <Stat value={participants} label="Participants" />
-        <Stat value={projects} label="Projects" />
-        <Stat value={champion} label="Champion" isText />
-      </div>
+
     </div>
   );
 }
