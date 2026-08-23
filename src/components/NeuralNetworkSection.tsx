@@ -230,9 +230,6 @@ function MobileLegacySection() {
           eyebrow={PHOTO_1_CAPTION.eyebrow}
           title={PHOTO_1_CAPTION.title}
           edition="1.0"
-          participants="140"
-          projects="35"
-          champion="Team Axiom"
           delay={0}
         />
 
@@ -248,9 +245,6 @@ function MobileLegacySection() {
           eyebrow={PHOTO_2_CAPTION.eyebrow}
           title={PHOTO_2_CAPTION.title}
           edition="2.0"
-          participants="300"
-          projects="75"
-          champion="Team Lumen"
           delay={150}
         />
 
@@ -280,18 +274,12 @@ function RevealCard({
   eyebrow,
   title,
   edition,
-  participants,
-  projects,
-  champion,
   delay,
 }: {
   photo: string;
   eyebrow: string;
   title: string;
   edition: string;
-  participants: string;
-  projects: string;
-  champion: string;
   delay: number;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
@@ -361,30 +349,7 @@ function RevealCard({
   );
 }
 
-function Stat({
-  value,
-  label,
-  isText = false,
-}: {
-  value: string;
-  label: string;
-  isText?: boolean;
-}) {
-  return (
-    <div className="flex flex-col items-center gap-1 py-1">
-      <span
-        className={
-          isText
-            ? "text-bone text-xs font-semibold text-center px-2 leading-tight"
-            : "font-display text-2xl font-semibold text-gold-bright"
-        }
-      >
-        {value}
-      </span>
-      <span className="label-caps text-[8px] text-mist tracking-[0.2em]">{label}</span>
-    </div>
-  );
-}
+
 
 /* Pure CSS/SVG animated neural network background — zero JS per-frame cost */
 function NeuralBackdropSVG() {
