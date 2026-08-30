@@ -215,8 +215,161 @@ export const WINNERS: Winner[] = [
 export const NAV_LINKS = [
   { href: "#about", label: "About" },
   { href: "#themes", label: "Themes" },
+  { href: "#rounds", label: "Rounds" },
   { href: "#schedule", label: "Schedule" },
   { href: "#winners", label: "Prizes" },
+];
+
+// ─── Rounds ─────────────────────────────────────────────────────────────────
+export type RoundStep = {
+  step: number;
+  title: string;
+  description: string;
+  icon: string;
+};
+
+export type EvaluationCriterion = {
+  icon: string;
+  title: string;
+  description: string;
+};
+
+export type RoundInfo = {
+  id: string;
+  roundNumber: number;
+  title: string;
+  subtitle: string;
+  eyebrow: string;
+  fee: string;
+  deadline?: string;
+  teamSize: string;
+  format: string;
+  steps: RoundStep[];
+  evaluation: EvaluationCriterion[];
+  keyDates?: { label: string; value: string }[];
+};
+
+export const ROUNDS: RoundInfo[] = [
+  {
+    id: "round-1",
+    roundNumber: 1,
+    title: "Idea Submission",
+    subtitle: "Your hackathon journey begins with YOUR IDEA! Submit an original, innovative abstract based on your selected official theme.",
+    eyebrow: "FREE & ONLINE",
+    fee: "FREE",
+    deadline: "11th September 2026",
+    teamSize: "3–4 Participants",
+    format: "PDF (Abstract Template)",
+    steps: [
+      {
+        step: 1,
+        title: "Team Registration",
+        description: "The Team Leader registers the complete team through the official Neurax Hackathon website.",
+        icon: "👥",
+      },
+      {
+        step: 2,
+        title: "Choose Your Theme",
+        description: "Each team selects ONE official hackathon theme. Your idea must be based on the selected theme and address a relevant real-world problem.",
+        icon: "🎯",
+      },
+      {
+        step: 3,
+        title: "Receive Guidelines",
+        description: "After registration, the Team Leader receives an email with Round 1 guidelines, theme details, submission instructions, and evaluation criteria.",
+        icon: "📩",
+      },
+      {
+        step: 4,
+        title: "Submit Your Idea",
+        description: "Submit an original and innovative idea using the official Abstract Template in PDF format before the deadline.",
+        icon: "📝",
+      },
+    ],
+    evaluation: [
+      { icon: "🎯", title: "Theme Relevance", description: "How well the idea aligns with the selected official theme." },
+      { icon: "💡", title: "Innovation", description: "Uniqueness and creativity of the proposed solution." },
+      { icon: "🔍", title: "Problem Relevance", description: "Importance and significance of the problem being addressed." },
+      { icon: "⚙️", title: "Feasibility", description: "Practicality and possibility of implementation." },
+      { icon: "🌍", title: "Potential Impact", description: "Value, scalability, and potential real-world impact." },
+      { icon: "📝", title: "Clarity", description: "How effectively the idea and proposed solution are presented." },
+    ],
+    keyDates: [
+      { label: "Submission Deadline", value: "11 September 2026" },
+      { label: "Shortlist Announced", value: "13 September 2026" },
+    ],
+  },
+  {
+    id: "round-2",
+    roundNumber: 2,
+    title: "The Challenge",
+    subtitle: "This is where the real challenge begins! The problem statement is revealed on the day — build a complete working project and present it live.",
+    eyebrow: "ON THE DAY OF THE HACKATHON",
+    fee: "₹349 / Participant",
+    teamSize: "3–4 Participants",
+    format: "Working Project + Live Demo",
+    steps: [
+      {
+        step: 1,
+        title: "Problem Statement Reveal",
+        description: "The Round 2 problem statement is officially revealed on the day of the hackathon. Teams do NOT receive it in advance.",
+        icon: "🚨",
+      },
+      {
+        step: 2,
+        title: "Analyze the Challenge",
+        description: "Understand the problem, identify key requirements, and plan your approach with your team.",
+        icon: "🧠",
+      },
+      {
+        step: 3,
+        title: "Build Your Solution",
+        description: "Develop a complete working project within the given hackathon timeline. Build, test, and prepare for demonstration.",
+        icon: "💻",
+      },
+      {
+        step: 4,
+        title: "Present & Demonstrate",
+        description: "Present your solution and demonstrate your working project before the judging panel.",
+        icon: "🎤",
+      },
+      {
+        step: 5,
+        title: "Final Evaluation",
+        description: "Teams are evaluated across all criteria. Top performers are recognized and awarded.",
+        icon: "🏆",
+      },
+    ],
+    evaluation: [
+      { icon: "💡", title: "Innovation & Creativity", description: "Originality and inventiveness of the solution." },
+      { icon: "🧠", title: "Problem Understanding", description: "Depth of analysis and understanding of the challenge." },
+      { icon: "💻", title: "Technical Implementation", description: "Quality of code, architecture, and engineering." },
+      { icon: "⚙️", title: "Functionality & Feasibility", description: "Does it work? Can it scale?" },
+      { icon: "🌍", title: "Impact & Scalability", description: "Real-world value and growth potential." },
+      { icon: "📊", title: "Presentation & Demo", description: "Clarity and effectiveness of the live demonstration." },
+    ],
+  },
+];
+
+// ─── Journey ────────────────────────────────────────────────────────────────
+export type JourneyStep = {
+  icon: string;
+  label: string;
+};
+
+export const HACKATHON_JOURNEY: JourneyStep[] = [
+  { icon: "👥", label: "Form a Team" },
+  { icon: "🎯", label: "Select a Theme" },
+  { icon: "💡", label: "Develop Your Idea" },
+  { icon: "📝", label: "Abstract Submission" },
+  { icon: "👨‍⚖️", label: "Idea Evaluation" },
+  { icon: "🏆", label: "Shortlisting" },
+  { icon: "💳", label: "Round 2 Registration" },
+  { icon: "🚨", label: "Problem Statement Reveal" },
+  { icon: "🧠", label: "Analyze the Challenge" },
+  { icon: "💻", label: "Build Your Project" },
+  { icon: "🎤", label: "Final Presentation" },
+  { icon: "🏆", label: "Winners" },
 ];
 
 // ─── Process ────────────────────────────────────────────────────────────────

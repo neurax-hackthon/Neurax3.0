@@ -61,14 +61,17 @@ export default function ThemeModal({ theme, revealed, onClose }: Props) {
               </p>
             </div>
           ) : !revealed ? (
-            <div className="flex flex-col items-center text-center py-6">
-              <span className="text-3xl">🔒</span>
-              <p className="label-caps text-xs md:text-sm text-gold-bright mt-4">
+            <div className="flex flex-col items-center text-center py-10 px-6 rounded-xl border border-gold-dim/40 bg-gold-dim/5">
+              <span className="text-5xl mb-2">🔒</span>
+              <p className="font-display text-xl md:text-2xl text-gold-bright mt-4 font-semibold">
                 Problem Statement Locked
               </p>
-              <p className="text-mist text-sm mt-3 max-w-xs">
-                Revealed by the organizers on the day of hackathon
+              <p className="text-mist text-sm md:text-base mt-4 max-w-sm leading-relaxed">
+                The problem statement for this track will be revealed by the organizers on the day of the hackathon.
               </p>
+              <span className="label-caps text-[10px] text-gold-dim mt-5 border border-line rounded-full px-4 py-1.5">
+                Stay Tuned
+              </span>
             </div>
           ) : (
             <div className="flex flex-col gap-6 animate-fade-in">

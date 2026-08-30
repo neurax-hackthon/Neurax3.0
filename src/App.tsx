@@ -8,6 +8,7 @@ import NeuralNetworkSection from "./components/NeuralNetworkSection";
 import AboutNeurax from "./components/AboutNeurax";
 import ThemeNetwork from "./components/ThemeNetwork";
 import Process from "./components/Process";
+import RoundDetails from "./components/RoundDetails";
 import ScheduleTimeline from "./components/ScheduleTimeline";
 import Benefits from "./components/Benefits";
 import Rules from "./components/Rules";
@@ -60,6 +61,7 @@ function App() {
         <AboutNeurax />
         <ThemeNetwork />
         <Process />
+        <RoundDetails />
         <ScheduleTimeline />
         <Benefits />
         <Rules />

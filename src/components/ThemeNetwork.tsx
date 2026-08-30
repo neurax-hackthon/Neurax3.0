@@ -69,12 +69,12 @@ export default function ThemeNetwork() {
           }
         />
 
-        <div className="flex justify-center -mt-6 mb-10">
+        <div className="flex justify-center -mt-4 mb-12">
           <span
-            className={`label-caps text-[10px] flex items-center gap-2 rounded-full border px-4 py-2 ${
+            className={`label-caps text-sm md:text-base flex items-center gap-3 rounded-full border-2 px-7 py-3.5 font-semibold tracking-wider ${
               problemStatementsVisible
-                ? "border-gold-dim/60 text-gold-bright"
-                : "border-line text-mist"
+                ? "border-gold/70 text-gold-bright bg-gold/10 shadow-[0_0_24px_rgba(201,163,95,0.25)]"
+                : "border-gold-dim/50 text-gold-bright bg-gold-dim/10 shadow-[0_0_20px_rgba(138,115,70,0.2)]"
             }`}
           >
             {problemStatementsVisible ? "🔓 Problem Statements Revealed" : "🔒 Problem Statements Locked"}
@@ -163,9 +163,9 @@ export default function ThemeNetwork() {
                   <span
                     className="absolute rounded-full animate-ping"
                     style={{
-                      width: "90px",
-                      height: "90px",
-                      background: "rgba(201,163,95,0.18)",
+                      width: "130px",
+                      height: "130px",
+                      background: "rgba(201,163,95,0.15)",
                       top: "50%",
                       left: "50%",
                       transform: "translate(-50%,-50%)",
@@ -178,18 +178,18 @@ export default function ThemeNetwork() {
                 <span
                   className="rounded-full transition-all duration-300"
                   style={{
-                    width: isActive ? "64px" : connected ? "48px" : "36px",
-                    height: isActive ? "64px" : connected ? "48px" : "36px",
+                    width: isActive ? "96px" : connected ? "80px" : "68px",
+                    height: isActive ? "96px" : connected ? "80px" : "68px",
                     background: isActive
                       ? "radial-gradient(circle, #e9c98a 30%, #c9a35f 100%)"
                       : connected
                       ? "radial-gradient(circle, #c9a35f 30%, #8a7346 100%)"
                       : "radial-gradient(circle, #8a7346 20%, #3a3020 100%)",
                     boxShadow: isActive
-                      ? "0 0 20px rgba(233,201,138,0.9), 0 0 40px rgba(201,163,95,0.45)"
+                      ? "0 0 24px rgba(233,201,138,0.9), 0 0 50px rgba(201,163,95,0.5)"
                       : connected
-                      ? "0 0 10px rgba(201,163,95,0.5)"
-                      : "0 0 4px rgba(138,115,70,0.3)",
+                      ? "0 0 14px rgba(201,163,95,0.5)"
+                      : "0 0 6px rgba(138,115,70,0.3)",
                   }}
                 />
 
