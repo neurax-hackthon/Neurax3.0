@@ -248,6 +248,40 @@ export default function RoundDetails() {
         {/* Journey Flowchart — between the two rounds */}
         <JourneyFlowchart />
 
+        {/* Important Disclaimer */}
+        <div className="my-10 md:my-14 rounded-2xl border border-gold-dim/60 bg-gradient-to-r from-gold-dim/10 via-charcoal/40 to-gold-dim/10 px-7 py-6 md:px-10 md:py-8">
+          <div className="flex items-start gap-4">
+            <span className="text-2xl md:text-3xl shrink-0 mt-0.5">⚠️</span>
+            <div>
+              <h4 className="font-display text-lg md:text-xl text-gold-bright font-medium mb-3">
+                Important — Please Read Carefully
+              </h4>
+              <p className="text-bone text-sm md:text-base leading-relaxed">
+                The abstract you submit in <span className="text-gold-bright font-semibold">Round 1</span> and the problem statement for <span className="text-gold-bright font-semibold">Round 2</span> are <span className="text-gold-bright font-semibold underline underline-offset-2">entirely different</span>.
+              </p>
+              <ul className="mt-4 flex flex-col gap-3">
+                <li className="flex items-start gap-3 text-sm md:text-base leading-relaxed">
+                  <span className="text-gold-bright font-bold shrink-0">01</span>
+                  <span className="text-mist">
+                    <span className="text-bone font-medium">Round 1 — Idea Submission:</span>{" "}
+                    You submit your own original idea based on a chosen theme. This abstract is used <span className="text-bone font-medium">solely for evaluation and shortlisting purposes</span> — it determines whether your team advances to Round 2.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3 text-sm md:text-base leading-relaxed">
+                  <span className="text-gold-bright font-bold shrink-0">02</span>
+                  <span className="text-mist">
+                    <span className="text-bone font-medium">Round 2 — The Challenge:</span>{" "}
+                    A <span className="text-bone font-medium">brand-new problem statement will be provided by the organizers</span> on the day of the hackathon. Shortlisted teams must build a complete working solution for this new problem — not the idea submitted in Round 1.
+                  </span>
+                </li>
+              </ul>
+              <p className="mt-4 text-mist text-xs md:text-sm leading-relaxed border-t border-line/40 pt-4">
+                Please plan accordingly. Round 1 showcases your innovative thinking; Round 2 tests your ability to execute under a time constraint on a fresh challenge.
+              </p>
+            </div>
+          </div>
+        </div>
+
         {/* Round 2 */}
         <RoundCard round={round2} accent="gold" />
       </div>
