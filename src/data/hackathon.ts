@@ -218,6 +218,7 @@ export const NAV_LINKS = [
   { href: "#rounds", label: "Rounds" },
   { href: "#schedule", label: "Schedule" },
   { href: "#winners", label: "Prizes" },
+  { href: "#contact", label: "Contact" },
 ];
 
 // ─── Rounds ─────────────────────────────────────────────────────────────────

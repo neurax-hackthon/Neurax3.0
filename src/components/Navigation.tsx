@@ -27,7 +27,7 @@ export default function Navigation() {
   }
 
   return (
-    <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-3xl">
+    <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-40 w-[92%] max-w-4xl">
       <div className="flex items-center justify-between rounded-full border border-line/80 bg-void/60 backdrop-blur-md px-5 py-2.5">
         {/* Brand — logo + wordmark */}
         <a
@@ -46,10 +46,10 @@ export default function Navigation() {
         </a>
 
         {/* Desktop nav links */}
-        <ul className="hidden md:flex items-center gap-7">
+        <ul className="hidden md:flex items-center gap-5">
           {NAV_LINKS.map((link) => {
             const id = link.href.replace("#", "");
-            const isActive = active === id;
+            const isActive = active === id && id !== "contact";
             return (
               <li key={link.href}>
                 <button
