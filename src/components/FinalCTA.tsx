@@ -60,6 +60,23 @@ export default function FinalCTA() {
           >
             Register Now
           </a>
+          <a
+            href="https://forms.gle/72RVgwhzMgoxYfs66"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group inline-flex items-center gap-2.5 label-caps text-xs px-8 py-4 rounded-full border border-gold-dim text-gold-bright font-semibold hover:bg-gold-bright hover:text-void hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] transition-all duration-300"
+          >
+            <span>Submit Abstract</span>
+            <svg
+              className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
         </div>
       </div>
     </section>

@@ -257,7 +257,7 @@ export const ROUNDS: RoundInfo[] = [
     subtitle: "Your hackathon journey begins with YOUR IDEA! Submit an original, innovative abstract based on your selected official theme.",
     eyebrow: "FREE & ONLINE",
     fee: "FREE",
-    deadline: "11th September 2026",
+    deadline: "13th September 2026",
     teamSize: "3–4 Participants",
     format: "PDF (Abstract Template)",
     steps: [
@@ -295,8 +295,8 @@ export const ROUNDS: RoundInfo[] = [
       { icon: "📝", title: "Clarity", description: "How effectively the idea and proposed solution are presented." },
     ],
     keyDates: [
-      { label: "Submission Deadline", value: "11 September 2026" },
-      { label: "Shortlist Announced", value: "13 September 2026" },
+      { label: "Submission Deadline", value: "13 September 2026" },
+      { label: "Shortlist Announced", value: "14 September 2026" },
     ],
   },
   {
@@ -397,13 +397,13 @@ export const PROCESS: ProcessStage[] = [
     icon: "📌",
   },
   {
-    date: "Sep 11, 2026",
+    date: "Sep 13, 2026",
     title: "Round 1 - Abstract submission",
     description: "Submit your project abstract for evaluation",
     icon: "📄",
   },
   {
-    date: "Sep 13, 2026",
+    date: "Sep 14, 2026",
     title: "Shortlisted Teams",
     description: "Selected teams will be notified via email",
     icon: "✅",
