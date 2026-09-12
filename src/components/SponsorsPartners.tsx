@@ -39,7 +39,7 @@ function SponsorItem({
       className={`
         group relative flex flex-col items-center text-center
         transition-all duration-500 ease-out hover:-translate-y-1
-        ${isTitle ? "py-10 md:py-14" : "py-6 md:py-8"}
+        ${isTitle ? "py-3 md:py-4" : "py-2 md:py-3"}
       `}
     >
       {/* Tier badge */}
@@ -140,14 +140,14 @@ export default function SponsorsPartners() {
 
           {/* ── Title Sponsor ─────────────────────────────── */}
           {titleSponsor && (
-            <div className="mb-10 md:mb-14 border-b border-line/40 pb-10 md:pb-14">
+            <div className="mb-3 md:mb-5 border-b border-line/40 pb-3 md:pb-5">
               <SponsorItem sponsor={titleSponsor} isTitle />
             </div>
           )}
 
           {/* ── Silver + Supporting row ───────────────────── */}
           {(silverSponsors.length > 0 || supportingSponsors.length > 0) && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 md:mb-14 border-b border-line/40 pb-10 md:pb-14">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 md:mb-5 border-b border-line/40 pb-3 md:pb-5">
               {silverSponsors.map((s) => (
                 <SponsorItem key={s.name} sponsor={s} />
               ))}
@@ -159,7 +159,7 @@ export default function SponsorsPartners() {
 
           {/* ── Associate Sponsors ────────────────────────── */}
           {associateSponsors.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10 md:mb-14 border-b border-line/40 pb-10 md:pb-14">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3 md:mb-5 border-b border-line/40 pb-3 md:pb-5">
               {associateSponsors.map((s) => (
                 <SponsorItem key={s.name} sponsor={s} />
               ))}
