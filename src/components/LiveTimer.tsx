@@ -57,7 +57,7 @@ export default function LiveTimer() {
       {/* Fireworks canvas — absolute, fills the section, behind timer text */}
       {showFireworks && (
         <Fireworks
-          duration={11000}
+          duration={120000}
           burstZoneY={0.42}
           onDone={handleFireworksDone}
         />
@@ -119,18 +119,18 @@ function TimeBlock({ value, label }: { value: string; label: string }) {
       <div
         className="flex items-center justify-center rounded-2xl border border-line bg-charcoal/80"
         style={{
-          width: "clamp(84px, 15vw, 160px)",
-          height: "clamp(94px, 17vw, 172px)",
+          width: "clamp(126px, 22.5vw, 240px)",
+          height: "clamp(141px, 25.5vw, 258px)",
         }}
       >
         <span
           className="font-sans font-medium text-bone tabular-nums leading-none"
-          style={{ fontSize: "clamp(2.75rem, 8vw, 6.5rem)" }}
+          style={{ fontSize: "clamp(4.125rem, 12vw, 9.75rem)" }}
         >
           {value}
         </span>
       </div>
-      <span className="label-caps text-[10px] md:text-xs text-mist">{label}</span>
+      <span className="label-caps text-sm md:text-base text-mist">{label}</span>
     </div>
   );
 }
@@ -139,7 +139,7 @@ function Colon() {
   return (
     <span
       className="font-sans font-medium text-gold-dim self-center opacity-60"
-      style={{ fontSize: "clamp(2rem, 5vw, 4rem)", marginTop: "-1.5rem" }}
+      style={{ fontSize: "clamp(3rem, 7.5vw, 6rem)", marginTop: "-2.25rem" }}
     >
       :
     </span>
