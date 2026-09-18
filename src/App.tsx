@@ -5,6 +5,7 @@ import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
 import LiveTimer from "./components/LiveTimer";
 import NeuralNetworkSection from "./components/NeuralNetworkSection";
+import { useHackathonState } from "./hooks/useHackathonState";
 import AboutNeurax from "./components/AboutNeurax";
 import ThemeNetwork from "./components/ThemeNetwork";
 import Process from "./components/Process";
@@ -29,6 +30,14 @@ function App() {
     return new URLSearchParams(window.location.search).has("gift");
   });
 
+  const { launched, animationHidden, loading } = useHackathonState();
+
+  useEffect(() => {
+    if (animationHidden || launched) {
+      setIntroDone(true);
+    }
+  }, [animationHidden, launched]);
+
   useEffect(() => {
     document.body.style.overflow = introDone ? "" : "hidden";
     if (introDone) {
@@ -49,15 +58,15 @@ function App() {
         />
       )}
 
-      {!introDone && <IntroScreen onEnter={() => setIntroDone(true)} />}
+      {!introDone && !loading && !launched && !animationHidden && <IntroScreen onEnter={() => setIntroDone(true)} />}
 
       <div id="top" />
       <Navigation />
       <ScrollProgress />
 
       <main>
-        <NeuralNetworkSection />
         <LiveTimer />
+        {!animationHidden && <NeuralNetworkSection />}
         <AboutNeurax />
         <ThemeNetwork />
         <Process />

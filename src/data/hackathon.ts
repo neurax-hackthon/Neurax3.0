@@ -117,9 +117,9 @@ export const SCHEDULE: { day: string; date: string; items: ScheduleItem[] }[] = 
       { time: "09:30 AM", label: "Opening Ceremony" },
       { time: "10:00 AM", label: "Hacking Begins" },
       { time: "02:00 PM", label: "Lunch" },
-      { time: "05:00 PM", label: "Activity & Checkpoint" },
+      { time: "05:00 PM", label: "Checkpoint 1" },
       { time: "08:00 PM", label: "Dinner" },
-      { time: "11:00 PM", label: "Checkpoint" },
+      { time: "12:00 PM", label: "Checkpoint 2" },
     ],
   },
   {
@@ -127,9 +127,8 @@ export const SCHEDULE: { day: string; date: string; items: ScheduleItem[] }[] = 
     date: "SEP 20",
     items: [
       { time: "01:00 AM", label: "Refreshment" },
-      { time: "06:00 AM", label: "Checkpoint" },
       { time: "08:00 AM", label: "Breakfast" },
-      { time: "10:00 AM", label: "Project Submission" },
+      { time: "10:00 AM", label: "Project Submission (Final Checkpoint)" },
       { time: "12:00 PM", label: "Awards & Closing Ceremony" },
     ],
   },

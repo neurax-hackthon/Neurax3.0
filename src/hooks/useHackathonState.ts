@@ -18,6 +18,7 @@ export const HACKATHON_DOC_PATH = "neurax3/hackathon" as const;
 export type HackathonState = {
   launched: boolean;
   launchTime: number;
+  animationHidden: boolean;
   problemStatementsVisible: boolean;
   customMessage: string;
   loading: boolean;
@@ -26,6 +27,7 @@ export type HackathonState = {
 const DEFAULTS: Omit<HackathonState, "loading"> = {
   launched: false,
   launchTime: 0,
+  animationHidden: false,
   problemStatementsVisible: false,
   customMessage: "",
 };
@@ -51,6 +53,7 @@ export function useHackathonState(): HackathonState {
           setState({
             launched: data.launched ?? false,
             launchTime: toMillis(data.launchTime),
+            animationHidden: data.animationHidden ?? false,
             problemStatementsVisible: data.problemStatementsVisible ?? false,
             customMessage: data.customMessage ?? "",
           });

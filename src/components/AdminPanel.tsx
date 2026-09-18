@@ -144,7 +144,7 @@ function NotAuthorized({ email }: { email: string | null }) {
 }
 
 function Dashboard({ email }: { email: string | null }) {
-  const { launched, launchTime, problemStatementsVisible, customMessage, loading } = useHackathonState();
+  const { launched, launchTime, animationHidden, problemStatementsVisible, customMessage, loading } = useHackathonState();
   const countdown = useLaunchCountdown(launchTime);
 
   const [busy, setBusy] = useState(false);
@@ -155,11 +155,27 @@ function Dashboard({ email }: { email: string | null }) {
 
   const finished = launched && countdown.finished;
 
-  async function handleStart() {
+  async function handleRemoveAnimation() {
     setBusy(true);
     setError("");
     try {
-      await setDoc(HACKATHON_REF(), { launched: true, launchTime: serverTimestamp() }, { merge: true });
+      await setDoc(HACKATHON_REF(), { animationHidden: true }, { merge: true });
+    } catch {
+      setError("Failed to remove animation. Check Firestore permissions.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function handleStartHackathon() {
+    setBusy(true);
+    setError("");
+    try {
+      await setDoc(
+        HACKATHON_REF(),
+        { launched: true, launchTime: serverTimestamp() },
+        { merge: true }
+      );
     } catch {
       setError("Launch failed. Check Firestore permissions.");
     } finally {
@@ -206,7 +222,7 @@ function Dashboard({ email }: { email: string | null }) {
     try {
       await setDoc(
         HACKATHON_REF(),
-        { launched: false, launchTime: 0, problemStatementsVisible: false, customMessage: "" },
+        { launched: false, launchTime: 0, animationHidden: false, problemStatementsVisible: false, customMessage: "" },
         { merge: true }
       );
       setConfirmReset(false);
@@ -235,28 +251,41 @@ function Dashboard({ email }: { email: string | null }) {
             <div className="flex items-center gap-2 mb-3">
               <span
                 className={`h-2 w-2 rounded-full ${
-                  finished ? "bg-mist" : launched ? "bg-cyan animate-pulse-slow" : "bg-gold-dim"
+                  finished ? "bg-mist" : launched ? "bg-cyan animate-pulse-slow" : animationHidden ? "bg-gold-dim animate-pulse-slow" : "bg-gold-dim"
                 }`}
               />
               <span className="label-caps text-[11px] text-bone">
-                {finished ? "Finished" : launched ? "Live" : "Not Started"}
+                {finished ? "Finished" : launched ? "Live" : animationHidden ? "Animation Removed" : "Not Started"}
               </span>
             </div>
 
             {launched && !finished && (
               <p className="font-display text-2xl text-gold-bright tabular-nums mb-3">
-                {countdown.hours}:{countdown.minutes}:{countdown.seconds}
+                {`${countdown.hours}:${countdown.minutes}:${countdown.seconds}`}
               </p>
             )}
 
-            {!launched && (
+            {/* Step 1: Remove animation */}
+            {!animationHidden && (
               <button
                 type="button"
-                onClick={handleStart}
+                onClick={handleRemoveAnimation}
                 disabled={busy}
                 className="w-full label-caps text-[11px] rounded-full bg-gold-bright text-void font-semibold py-3 hover:bg-bone transition-colors disabled:opacity-60"
               >
-                {busy ? "Launching…" : "🚀 Start Hackathon"}
+                {busy ? "Removing…" : "🎬 Remove Animation"}
+              </button>
+            )}
+
+            {/* Step 2: Start hackathon (appears after animation is removed) */}
+            {animationHidden && !launched && (
+              <button
+                type="button"
+                onClick={handleStartHackathon}
+                disabled={busy}
+                className="w-full label-caps text-[11px] rounded-full border border-cyan-dim text-cyan font-semibold py-3 hover:bg-cyan-dim/10 transition-colors disabled:opacity-60"
+              >
+                {busy ? "Starting…" : "🚀 Start Hackathon"}
               </button>
             )}
           </div>

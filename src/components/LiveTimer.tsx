@@ -1,38 +1,76 @@
-import { useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ScrollTrigger } from "../lib/gsap";
 import { useHackathonState } from "../hooks/useHackathonState";
 import { useLaunchCountdown } from "../hooks/useLaunchCountdown";
+import Fireworks from "./Fireworks";
 
 // Renders nothing until the admin starts the hackathon — driven entirely by
 // the shared Firestore state, so every connected client flips to LIVE at the
 // same instant with no reload.
 export default function LiveTimer() {
-  const { launched, launchTime, customMessage } = useHackathonState();
+  const { launched, launchTime, customMessage, loading } = useHackathonState();
   const countdown = useLaunchCountdown(launchTime);
 
-  // This section mounts/unmounts right below the pinned NeuralNetworkSection,
-  // shifting the scroll-trigger positions of everything further down the
-  // page. A refresh here keeps those triggers (and ScrollProgress) accurate
-  // instead of firing at a stale offset.
+  const [showFireworks, setShowFireworks] = useState(false);
+  const handleFireworksDone = useCallback(() => setShowFireworks(false), []);
+
+  // null = Firestore hasn't delivered its first snapshot yet (unseeded)
+  // false/true = the value of `launched` at the time of first snapshot
+  const prevLaunched = useRef<boolean | null>(null);
+  const firedRef = useRef(false);
+
+  // Single effect — seed on first delivery, detect false→true on later ones.
+  useEffect(() => {
+    if (loading) return;
+
+    // First Firestore snapshot: record state and bail — don't fire on page load
+    if (prevLaunched.current === null) {
+      prevLaunched.current = launched;
+      return;
+    }
+
+    const prev = prevLaunched.current;
+    prevLaunched.current = launched;
+
+    // Fire exactly once when we witness the transition live
+    if (!firedRef.current && !prev && launched && launchTime) {
+      firedRef.current = true;
+      setShowFireworks(true);
+    }
+  }, [launched, launchTime, loading]);
+
+  // Keep scroll triggers accurate when the section mounts/unmounts
   useEffect(() => {
     const id = requestAnimationFrame(() => ScrollTrigger.refresh());
     return () => cancelAnimationFrame(id);
   }, [launched]);
 
-  if (!launched) return null;
+  if (!launched || !launchTime) return null;
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-6 py-28 bg-void border-b border-line overflow-hidden">
+      {/* Ambient glow */}
       <div className="absolute inset-0 opacity-40">
         <div className="absolute left-1/2 top-1/2 h-[60vmax] w-[60vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/5 blur-3xl" />
       </div>
+
+      {/* Fireworks canvas — absolute, fills the section, behind timer text */}
+      {showFireworks && (
+        <Fireworks
+          duration={11000}
+          burstZoneY={0.42}
+          onDone={handleFireworksDone}
+        />
+      )}
 
       <div className="relative z-10 flex flex-col items-center text-center">
         {!countdown.finished ? (
           <>
             <span className="inline-flex items-center gap-2 rounded-full border border-cyan-dim/60 px-5 py-2 mb-7">
-              <span className="h-2.5 w-2.5 rounded-full bg-cyan animate-pulse-slow" />
-              <span className="label-caps text-xs md:text-sm text-cyan">Live Now</span>
+              <span className="h-2.5 w-2.5 rounded-full bg-cyan" />
+              <span className="label-caps text-xs md:text-sm text-cyan">
+                Live Now
+              </span>
             </span>
 
             <h2 className="font-display text-3xl md:text-5xl text-bone">
