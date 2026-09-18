@@ -59,30 +59,30 @@ function randomBetween(a: number, b: number) {
 }
 
 function createSparks(x: number, y: number, colors: string[]): Spark[] {
-  const count = Math.floor(randomBetween(160, 240));
+  const count = Math.floor(randomBetween(90, 150));
   return Array.from({ length: count }, (_, i) => {
     const angle = (i / count) * Math.PI * 2 + randomBetween(-0.15, 0.15);
-    const speed = randomBetween(3, 12);
+    const speed = randomBetween(1.8, 7);
     return {
       x, y,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed,
       alpha: 1,
       color: colors[Math.floor(Math.random() * colors.length)],
-      radius: randomBetween(3, 6),
-      decay: randomBetween(0.008, 0.016),
-      gravity: randomBetween(0.04, 0.1),
+      radius: randomBetween(1.5, 3.2),
+      decay: randomBetween(0.011, 0.021),
+      gravity: randomBetween(0.035, 0.085),
     };
   });
 }
 
 function createRocket(canvasW: number, canvasH: number, burstY: number): Rocket {
   const palette = PALETTES[Math.floor(Math.random() * PALETTES.length)];
-  const x = randomBetween(canvasW * 0.05, canvasW * 0.95);
-  const targetY = burstY + randomBetween(-canvasH * 0.18, canvasH * 0.18);
-  const speed = randomBetween(16, 24);
+  const x = randomBetween(canvasW * 0.1, canvasW * 0.9);
+  const targetY = burstY + randomBetween(-canvasH * 0.12, canvasH * 0.12);
+  const speed = randomBetween(13, 19);
   const vy = -speed;
-  const vx = randomBetween(-2.5, 2.5);
+  const vx = randomBetween(-1.5, 1.5);
   return { x, y: canvasH, vx, vy, targetY, colors: palette, trail: [], exploded: false };
 }
 
@@ -90,11 +90,11 @@ function createSparkle(canvasW: number, canvasH: number): Sparkle {
   return {
     x: randomBetween(0, canvasW),
     y: randomBetween(0, canvasH),
-    size: randomBetween(7, 18),
+    size: randomBetween(3, 9),
     alpha: 0,
-    maxAlpha: randomBetween(0.6, 1.0),
+    maxAlpha: randomBetween(0.5, 1.0),
     phase: 0,
-    speed: randomBetween(0.008, 0.022),
+    speed: randomBetween(0.012, 0.03),
     color: SPARKLE_COLORS[Math.floor(Math.random() * SPARKLE_COLORS.length)],
     rotation: randomBetween(0, Math.PI / 4),
   };
@@ -268,12 +268,12 @@ export default function Fireworks({ duration = 11000, onDone, burstZoneY = 0.38 
         ctx.globalAlpha = globalAlpha;
 
         // Head glow
-        const grd = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, 14);
+        const grd = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, 7);
         grd.addColorStop(0, "#ffffff");
         grd.addColorStop(0.3, r.colors[0]);
         grd.addColorStop(1, "transparent");
         ctx.beginPath();
-        ctx.arc(r.x, r.y, 14, 0, Math.PI * 2);
+        ctx.arc(r.x, r.y, 7, 0, Math.PI * 2);
         ctx.fillStyle = grd;
         ctx.fill();
 
@@ -287,13 +287,13 @@ export default function Fireworks({ duration = 11000, onDone, burstZoneY = 0.38 
           r.exploded = true;
           sparks.push(...createSparks(r.x, r.y, r.colors));
           // Flash
-          ctx.globalAlpha = 0.9 * globalAlpha;
-          const flash = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, 55);
+          ctx.globalAlpha = 0.85 * globalAlpha;
+          const flash = ctx.createRadialGradient(r.x, r.y, 0, r.x, r.y, 28);
           flash.addColorStop(0, "#ffffff");
           flash.addColorStop(0.4, r.colors[0] + "cc");
           flash.addColorStop(1, "transparent");
           ctx.beginPath();
-          ctx.arc(r.x, r.y, 55, 0, Math.PI * 2);
+          ctx.arc(r.x, r.y, 28, 0, Math.PI * 2);
           ctx.fillStyle = flash;
           ctx.fill();
           ctx.globalAlpha = globalAlpha;
@@ -328,7 +328,7 @@ export default function Fireworks({ duration = 11000, onDone, burstZoneY = 0.38 
 
       // ── Sparkles (twinkling stars across the canvas) ──────────────────────────
       // Spawn new sparkles every few frames to keep the pool populated
-      if (frameCount % 3 === 0 && sparkles.length < 90) {
+      if (frameCount % 4 === 0 && sparkles.length < 60) {
         sparkles.push(createSparkle(canvas.width, canvas.height));
       }
 
