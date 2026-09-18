@@ -57,7 +57,7 @@ export default function LiveTimer() {
       {/* Fireworks canvas — absolute, fills the section, behind timer text */}
       {showFireworks && (
         <Fireworks
-          duration={120000}
+          duration={300000}
           burstZoneY={0.42}
           onDone={handleFireworksDone}
         />
