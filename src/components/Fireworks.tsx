@@ -180,13 +180,13 @@ export default function Fireworks({ duration = 11000, onDone, burstZoneY = 0.38 
 
     // ── Start once canvas has real dimensions ──────────────────────────────────
     function start() {
-      if (started || canvas.width === 0 || canvas.height === 0) return;
+      if (started || canvas!.width === 0 || canvas!.height === 0) return;
       started = true;
       startTime = performance.now();
       scheduleRockets();
       // Pre-populate some sparkles
       for (let i = 0; i < 30; i++) {
-        const sp = createSparkle(canvas.width, canvas.height);
+        const sp = createSparkle(canvas!.width, canvas!.height);
         sp.phase = Math.random(); // stagger initial phases
         sparkles.push(sp);
       }
