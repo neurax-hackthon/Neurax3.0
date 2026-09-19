@@ -16,7 +16,6 @@ export default function ThemeModal({ theme, revealed, onClose }: Props) {
     return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
-  const ps = theme.problemStatement;
 
   return (
     <div
@@ -74,35 +73,20 @@ export default function ThemeModal({ theme, revealed, onClose }: Props) {
               </span>
             </div>
           ) : (
-            <div className="flex flex-col gap-6 animate-fade-in">
-              <div>
-                <span className="label-caps text-[10px] text-cyan">{ps.code} · Problem Statement</span>
-                <p className="text-bone text-sm md:text-base leading-relaxed mt-2">{ps.summary}</p>
-              </div>
-
-              <div>
-                <span className="label-caps text-[10px] text-cyan">Objectives</span>
-                <ul className="flex flex-col gap-2 mt-2">
-                  {ps.objectives.map((o) => (
-                    <li key={o} className="flex gap-3 text-mist text-sm leading-relaxed">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                      {o}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div>
-                <span className="label-caps text-[10px] text-cyan">Requirements</span>
-                <ul className="flex flex-col gap-2 mt-2">
-                  {ps.requirements.map((r) => (
-                    <li key={r} className="flex gap-3 text-mist text-sm leading-relaxed">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-gold" />
-                      {r}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="flex flex-col items-center text-center gap-5 animate-fade-in py-4">
+              <span className="text-5xl">📂</span>
+              <p className="label-caps text-xs text-cyan">Problem Statement Revealed</p>
+              <p className="text-mist text-sm leading-relaxed max-w-xs">
+                The full problem statement for this track is available in the official NeuraX Drive folder.
+              </p>
+              <a
+                href="https://drive.google.com/drive/folders/1UGvL3xUq1PfAL35A7taghP2XtdJuJTy0?usp=drive_link"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="label-caps text-[11px] rounded-full bg-gold-bright text-void font-semibold px-7 py-3 hover:bg-bone transition-colors"
+              >
+                📄 Open Problem Statements →
+              </a>
             </div>
           )}
         </div>

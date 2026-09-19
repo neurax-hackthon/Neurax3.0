@@ -13,12 +13,6 @@ export const EVENT = {
   dateLabel: "SEP 19–20, 2026",
 };
 
-export type ProblemStatement = {
-  code: string;
-  summary: string;
-  objectives: string[];
-  requirements: string[];
-};
 
 export type Theme = {
   id: string;
@@ -34,7 +28,6 @@ export type Theme = {
   comingSoon?: boolean;
   // Hidden from the public site until the admin reveals it — see
   // useHackathonState()'s `problemStatementsVisible` flag.
-  problemStatement: ProblemStatement;
 };
 
 export const THEMES: Theme[] = [
@@ -47,12 +40,6 @@ export const THEMES: Theme[] = [
     x: 50,
     y: 14,
     comingSoon: false,
-    problemStatement: {
-      code: "PS / 01",
-      summary: "",
-      objectives: [],
-      requirements: [],
-    },
   },
   {
     id: "ai-cybersecurity",
@@ -63,20 +50,6 @@ export const THEMES: Theme[] = [
     x: 18,
     y: 78,
     comingSoon: false,
-    problemStatement: {
-      code: "PS / 02",
-      summary: "Develop an AI-powered cybersecurity solution to proactively detect and mitigate emerging network threats.",
-      objectives: [
-        "Detect anomalies in network traffic in real-time.",
-        "Classify potential threats and minimize false positives.",
-        "Provide actionable insights for rapid incident response."
-      ],
-      requirements: [
-        "Implement a scalable machine learning model.",
-        "Provide a dashboard for threat visualization.",
-        "Ensure low latency in threat detection."
-      ],
-    },
   },
   {
     id: "ai-smart-cities",
@@ -87,12 +60,6 @@ export const THEMES: Theme[] = [
     x: 82,
     y: 78,
     comingSoon: false,
-    problemStatement: {
-      code: "PS / 03",
-      summary: "",
-      objectives: [],
-      requirements: [],
-    },
   },
 ];
 
@@ -117,9 +84,9 @@ export const SCHEDULE: { day: string; date: string; items: ScheduleItem[] }[] = 
       { time: "09:30 AM", label: "Opening Ceremony" },
       { time: "10:00 AM", label: "Hacking Begins" },
       { time: "02:00 PM", label: "Lunch" },
-      { time: "05:00 PM", label: "Checkpoint 1" },
+      { time: "05:00 PM", label: "Activity & Checkpoint" },
       { time: "08:00 PM", label: "Dinner" },
-      { time: "12:00 PM", label: "Checkpoint 2" },
+      { time: "11:00 PM", label: "Checkpoint" },
     ],
   },
   {
@@ -127,8 +94,9 @@ export const SCHEDULE: { day: string; date: string; items: ScheduleItem[] }[] = 
     date: "SEP 20",
     items: [
       { time: "01:00 AM", label: "Refreshment" },
+      { time: "06:00 AM", label: "Checkpoint" },
       { time: "08:00 AM", label: "Breakfast" },
-      { time: "10:00 AM", label: "Project Submission (Final Checkpoint)" },
+      { time: "10:00 AM", label: "Project Submission" },
       { time: "12:00 PM", label: "Awards & Closing Ceremony" },
     ],
   },
