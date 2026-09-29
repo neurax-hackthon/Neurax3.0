@@ -1,5 +1,6 @@
 import { useState } from "react";
 import cybersecurityWinnerPhoto from "../../IMG_6886.JPG (1).jpeg";
+import automationWinnerPhoto from "../../IMG_6888.JPG.jpeg";
 import smartCityWinnerPhoto from "../../IMG_6878.JPG.jpeg";
 
 // ─── Winner Data ─────────────────────────────────────────────────────────────
@@ -7,6 +8,7 @@ const DOMAIN_WINNERS = [
   {
     id: "automation",
     domain: "AI in Industry Automation",
+    photo: automationWinnerPhoto,
     icon: "🏭",
     teamName: "HUNGRY INNOVATORS",
     teamId: "NX3-AIA-39",
@@ -185,7 +187,7 @@ export default function WinnersHero() {
           </div>
 
           {/* ── Tabs (left) + Card (right) ── */}
-          <div className="flex flex-col lg:flex-row items-stretch gap-5 w-full max-w-5xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-stretch gap-5 w-full max-w-7xl mx-auto">
 
             {/* LEFT: Vertical tab list */}
             <div className="lg:w-64 xl:w-72 shrink-0 flex flex-col gap-2.5">
@@ -248,23 +250,20 @@ export default function WinnersHero() {
             {/* RIGHT: Winner card */}
             <div
               key={winner.id}
-              className={`flex-1 rounded-3xl border ${winner.border} bg-charcoal/60 backdrop-blur-sm overflow-hidden ${winner.glow} transition-all duration-500`}
+              className={`flex-1 rounded-3xl border ${winner.border} bg-charcoal/60 backdrop-blur-sm overflow-hidden ${winner.glow} transition-all duration-500 flex flex-col md:flex-row`}
               style={{ animation: "fadeSlideUp 0.3s ease both" }}
             >
-              {/* Photo placeholder */}
+              {/* Photo — full image, no cropping, dominant over text */}
               <div
-                className={`relative w-full border-b ${winner.border} bg-void/60 flex flex-col items-center justify-center gap-2`}
-                style={{ height: "220px" }}
+                className={`relative w-full md:w-3/5 shrink-0 border-b md:border-b-0 md:border-r ${winner.border} bg-void/80 flex flex-col items-center justify-center gap-2`}
+                style={{ minHeight: "480px" }}
               >
                 {winner.photo ? (
-                  <>
-                    <img
-                      src={winner.photo}
-                      alt={`${winner.teamName} winning team`}
-                      className="absolute inset-0 h-full w-full object-cover object-center"
-                    />
-                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-void/60 via-transparent to-void/10" />
-                  </>
+                  <img
+                    src={winner.photo}
+                    alt={`${winner.teamName} winning team`}
+                    className="absolute inset-0 h-full w-full object-contain object-center"
+                  />
                 ) : (
                   <div className="relative z-10 flex flex-col items-center gap-2">
                     <div className={`flex items-center justify-center h-16 w-16 rounded-2xl border-2 ${winner.border} ${winner.tagBg} text-4xl`}>
@@ -282,31 +281,31 @@ export default function WinnersHero() {
                 </div>
               </div>
 
-              {/* Details */}
-              <div className="p-6">
-                <div className="mb-5">
-                  <p className={`label-caps text-[9px] ${winner.tagColor} mb-1`}>{winner.domain}</p>
-                  <h2 className={`font-display text-2xl md:text-3xl font-semibold ${winner.tagColor} leading-tight`}>
+              {/* Details — narrower, secondary to the photo */}
+              <div className="w-full md:w-2/5 p-4 md:p-5 flex flex-col justify-center">
+                <div className="mb-2">
+                  <p className={`label-caps text-[9px] ${winner.tagColor} mb-0.5`}>{winner.domain}</p>
+                  <h2 className={`font-display text-xl md:text-2xl font-semibold ${winner.tagColor} leading-tight`}>
                     {winner.teamName}
                   </h2>
                 </div>
 
-                <div className="grid grid-cols-2 gap-x-6 gap-y-4 mb-5">
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mb-2">
                   <div>
-                    <p className="label-caps text-[9px] text-mist/50 mb-1">Team ID</p>
+                    <p className="label-caps text-[9px] text-mist/50 mb-0.5">Team ID</p>
                     <p className={`font-display text-sm font-semibold ${winner.tagColor}`}>{winner.teamId}</p>
                   </div>
                   <div>
-                    <p className="label-caps text-[9px] text-mist/50 mb-1">State</p>
+                    <p className="label-caps text-[9px] text-mist/50 mb-0.5">State</p>
                     <p className="text-bone text-sm font-medium">{winner.state}</p>
                   </div>
                   <div className="col-span-2">
-                    <p className="label-caps text-[9px] text-mist/50 mb-1">Institution</p>
+                    <p className="label-caps text-[9px] text-mist/50 mb-0.5">Institution</p>
                     <p className="text-bone text-sm font-medium leading-snug">{winner.college}</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2.5 pt-4 border-t border-line/40">
+                <div className="flex flex-wrap items-center gap-2 pt-2 border-t border-line/40">
                   <span className={`inline-flex items-center gap-1.5 label-caps text-[10px] px-3 py-1.5 rounded-full border ${winner.border} ${winner.tagBg} ${winner.tagColor}`}>
                     👥 {winner.teamSize} Member{winner.teamSize > 1 ? "s" : ""}
                   </span>
