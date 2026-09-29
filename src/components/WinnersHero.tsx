@@ -119,7 +119,7 @@ export default function WinnersHero() {
   return (
     <section
       id="champions"
-      className="relative bg-void overflow-hidden pt-24 pb-16"
+      className="relative bg-void overflow-hidden pt-16 sm:pt-20 md:pt-24 pb-12 sm:pb-16"
     >
       {/* Ambient glow */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center" aria-hidden>
@@ -160,11 +160,11 @@ export default function WinnersHero() {
       <div className="relative z-10 px-4 md:px-8 xl:px-[120px]">
 
           {/* Compact eyebrow + heading */}
-          <div className="flex flex-col items-center gap-2 text-center mb-8">
-            <span className="label-caps text-[11px] text-cyan tracking-[0.35em]">
+          <div className="flex flex-col items-center gap-2 text-center mb-6 sm:mb-8 px-2">
+            <span className="label-caps text-[10px] sm:text-[11px] text-cyan tracking-[0.25em] sm:tracking-[0.35em]">
               NEURAX 3.0 · 24 HOURS COMPLETE
             </span>
-            <h1 className="font-display text-5xl sm:text-6xl md:text-7xl font-medium text-bone leading-none">
+            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl font-medium text-bone leading-none">
               Champions
             </h1>
             <p className="text-mist text-sm max-w-md mt-1">
@@ -172,7 +172,7 @@ export default function WinnersHero() {
             </p>
 
             {/* Stats row */}
-            <div className="flex items-center gap-8 md:gap-12 mt-3">
+            <div className="flex items-center gap-6 sm:gap-8 md:gap-12 mt-3">
               {[
                 { value: "3", label: "Domains" },
                 { value: "10", label: "Champions" },
@@ -255,8 +255,7 @@ export default function WinnersHero() {
             >
               {/* Photo — full image, no cropping, dominant over text */}
               <div
-                className={`relative w-full md:w-3/5 shrink-0 border-b md:border-b-0 md:border-r ${winner.border} bg-void/80 flex flex-col items-center justify-center gap-2`}
-                style={{ minHeight: "480px" }}
+                className={`relative w-full md:w-3/5 shrink-0 border-b md:border-b-0 md:border-r ${winner.border} bg-void/80 flex flex-col items-center justify-center gap-2 min-h-[240px] sm:min-h-[320px] md:min-h-[420px] lg:min-h-[480px]`}
               >
                 {winner.photo ? (
                   <img

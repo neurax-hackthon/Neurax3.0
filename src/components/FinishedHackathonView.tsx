@@ -1,5 +1,4 @@
 import WinnersHero from "./WinnersHero";
-import Winners from "./Winners";
 import Gallery from "./Gallery";
 import FAQSupport from "./FAQSupport";
 import SponsorsPartners from "./SponsorsPartners";
@@ -37,7 +36,6 @@ export default function FinishedHackathonView() {
         <Benefits />
         <Rules />
         <PreviousHackathons />
-        <Winners />
         <Gallery />
         <FAQSupport />
         <SponsorsPartners />
