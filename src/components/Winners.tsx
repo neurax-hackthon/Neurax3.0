@@ -1,43 +1,43 @@
 import SectionHeading from "./SectionHeading";
 
-// const DOMAIN_PRIZES = [
-//   {
-//     domain: "AI in Industry Automation",
-//     icon: "🏭",
-//     amount: "₹6,000",
-//     description: "Best project driving intelligent automation and smart manufacturing.",
-//     accent: "gold",
-//     glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
-//     border: "border-gold-bright/60",
-//     tagColor: "text-gold-bright",
-//     tagBorder: "border-gold-dim/50",
-//     badge: "bg-gold-dim/10",
-//   },
-//   {
-//     domain: "AI in Cybersecurity",
-//     icon: "🛡️",
-//     amount: "₹6,000",
-//     description: "Best project advancing threat detection and resilient network defense.",
-//     accent: "cyan",
-//     glow: "shadow-[0_0_40px_rgba(100,220,220,0.25)]",
-//     border: "border-cyan/50",
-//     tagColor: "text-cyan",
-//     tagBorder: "border-cyan/40",
-//     badge: "bg-cyan/10",
-//   },
-//   {
-//     domain: "AI in Smart Cities",
-//     icon: "🏙️",
-//     amount: "₹6,000",
-//     description: "Best project shaping intelligent urban infrastructure and city services.",
-//     accent: "gold",
-//     glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
-//     border: "border-gold-bright/60",
-//     tagColor: "text-gold-bright",
-//     tagBorder: "border-gold-dim/50",
-//     badge: "bg-gold-dim/10",
-//   },
-// ];
+const DOMAIN_PRIZES = [
+  {
+    domain: "AI in Industry Automation",
+    icon: "🏭",
+    amount: "₹10,000",
+    description: "Best project driving intelligent automation and smart manufacturing.",
+    accent: "gold",
+    glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
+    border: "border-gold-bright/60",
+    tagColor: "text-gold-bright",
+    tagBorder: "border-gold-dim/50",
+    badge: "bg-gold-dim/10",
+  },
+  {
+    domain: "AI in Cybersecurity",
+    icon: "🛡️",
+    amount: "₹10,000",
+    description: "Best project advancing threat detection and resilient network defense.",
+    accent: "cyan",
+    glow: "shadow-[0_0_40px_rgba(100,220,220,0.25)]",
+    border: "border-cyan/50",
+    tagColor: "text-cyan",
+    tagBorder: "border-cyan/40",
+    badge: "bg-cyan/10",
+  },
+  {
+    domain: "AI in Smart Cities",
+    icon: "🏙️",
+    amount: "₹10,000",
+    description: "Best project shaping intelligent urban infrastructure and city services.",
+    accent: "gold",
+    glow: "shadow-[0_0_40px_rgba(233,201,138,0.30)]",
+    border: "border-gold-bright/60",
+    tagColor: "text-gold-bright",
+    tagBorder: "border-gold-dim/50",
+    badge: "bg-gold-dim/10",
+  },
+];
 
 export default function Winners() {
   return (
@@ -55,7 +55,7 @@ export default function Winners() {
           subtitle="One winning team per track. Three domains, three equal champions."
         />
 
-        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mt-4">
           {DOMAIN_PRIZES.map((prize) => (
             <div
               key={prize.domain}
@@ -98,19 +98,40 @@ export default function Winners() {
           ))}
         </div>
 
-        <div className="mt-14 flex flex-col items-center gap-3">
-          <div className="flex items-center gap-3 rounded-full border border-line bg-charcoal/40 px-6 py-3">
-            <span className="text-xl">🏆</span>
-            <span className="font-display text-gold-bright text-lg">₹18,000 Total Prize Pool</span>
+        {/* Total prize pool & perks */}
+        <div className="mt-14 flex flex-col items-center gap-5">
+          <div className="flex items-center gap-3 rounded-full border border-gold-bright/50 bg-charcoal/40 px-7 py-4 shadow-[0_0_30px_rgba(233,201,138,0.20)]">
+            <span className="text-2xl">🏆</span>
+            <span className="font-display text-gold-bright text-xl md:text-2xl">₹50,000+ Total Prize Pool</span>
           </div>
-          <p className="text-mist text-xs text-center">
-            Additional goodies & swags for all participants · Certificates for all teams
-          </p>
-        </div> */}
 
-        <div className="mt-16 flex flex-col items-center justify-center p-12 border border-line rounded-2xl bg-charcoal/40 backdrop-blur-sm">
-          <h3 className="font-display text-3xl md:text-4xl text-gold-bright mb-4">Soon to be disclosed</h3>
-          <p className="text-mist text-lg">Stay tuned for the total prize pool!</p>
+          {/* PPO / PPI banner */}
+          <div className="w-full rounded-2xl border border-gold-dim/40 bg-charcoal/50 backdrop-blur-sm px-8 py-6 flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12">
+            <div className="flex flex-col items-center gap-1 text-center">
+              <span className="text-3xl">💼</span>
+              <p className="label-caps text-xs text-gold-bright mt-1">PPO</p>
+              <p className="text-bone text-sm font-medium">Pre-Placement Offer</p>
+              <p className="text-mist text-xs max-w-[180px] mt-1">Top performers may receive direct placement offers from sponsor companies.</p>
+            </div>
+            <div className="hidden md:block h-16 w-px bg-line" />
+            <div className="flex flex-col items-center gap-1 text-center">
+              <span className="text-3xl">🚀</span>
+              <p className="label-caps text-xs text-gold-bright mt-1">PPI</p>
+              <p className="text-bone text-sm font-medium">Pre-Placement Interview</p>
+              <p className="text-mist text-xs max-w-[180px] mt-1">Outstanding teams get fast-tracked interview opportunities at leading sponsored companies.</p>
+            </div>
+            <div className="hidden md:block h-16 w-px bg-line" />
+            <div className="flex flex-col items-center gap-1 text-center">
+              <span className="text-3xl">🎁</span>
+              <p className="label-caps text-xs text-gold-bright mt-1">PERKS</p>
+              <p className="text-bone text-sm font-medium">Goodies &amp; Swag</p>
+              <p className="text-mist text-xs max-w-[180px] mt-1">Additional goodies, swag &amp; certificates for all participating teams.</p>
+            </div>
+          </div>
+
+          <p className="text-mist text-xs text-center">
+            PPO &amp; PPI opportunities are offered by sponsoring companies at their discretion · Certificates for all teams
+          </p>
         </div>
       </div>
     </section>

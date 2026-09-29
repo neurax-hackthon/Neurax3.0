@@ -57,17 +57,6 @@ export default function AboutNeurax() {
             ))}
           </div>
         </div>
-
-        <div className="mt-12 flex justify-center">
-          <a
-            href="https://forms.gle/RCSs4ajT6XzV2evJA"
-            target="_blank"
-            rel="noreferrer"
-            className="label-caps text-xs px-8 py-4 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"
-          >
-            Register Now
-          </a>
-        </div>
       </div>
     </section>
   );

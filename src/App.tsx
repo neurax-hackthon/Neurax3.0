@@ -3,7 +3,6 @@ import { ScrollTrigger } from "./lib/gsap";
 import IntroScreen from "./components/IntroScreen";
 import Navigation from "./components/Navigation";
 import ScrollProgress from "./components/ScrollProgress";
-import LiveTimer from "./components/LiveTimer";
 import NeuralNetworkSection from "./components/NeuralNetworkSection";
 import { useHackathonState } from "./hooks/useHackathonState";
 import AboutNeurax from "./components/AboutNeurax";
@@ -22,6 +21,8 @@ import FinalCTA from "./components/FinalCTA";
 import Footer from "./components/Footer";
 import AdminPanel from "./components/AdminPanel";
 import GiftUnwrap from "./components/GiftUnwrap";
+import FinishedHackathonView from "./components/FinishedHackathonView";
+import LiveTimer from "./components/LiveTimer";
 
 function App() {
   const [introDone, setIntroDone] = useState(false);
@@ -44,6 +45,23 @@ function App() {
       requestAnimationFrame(() => ScrollTrigger.refresh());
     }
   }, [introDone]);
+
+  // ── Hackathon is over: show the finished/winners view ──
+  if (launched && !loading) {
+    return (
+      <div className="grain">
+        {giftMode && (
+          <GiftUnwrap
+            onDismiss={() => {
+              window.history.replaceState({}, "", window.location.pathname);
+              setGiftMode(false);
+            }}
+          />
+        )}
+        <FinishedHackathonView />
+      </div>
+    );
+  }
 
   return (
     <div className="grain">

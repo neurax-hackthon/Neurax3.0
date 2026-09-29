@@ -65,16 +65,6 @@ export default function Navigation() {
           })}
         </ul>
 
-        {/* CTA */}
-        <a
-          href="https://forms.gle/RCSs4ajT6XzV2evJA"
-          target="_blank"
-          rel="noreferrer"
-          className="hidden md:inline-flex label-caps text-[10px] px-4 py-2 rounded-full bg-gold-bright text-void font-semibold hover:bg-bone transition-colors"
-        >
-          Register Now
-        </a>
-
         {/* Hamburger */}
         <button
           type="button"
@@ -99,14 +89,6 @@ export default function Navigation() {
               {link.label}
             </button>
           ))}
-          <a
-            href="https://forms.gle/RCSs4ajT6XzV2evJA"
-            target="_blank"
-            rel="noreferrer"
-            className="label-caps text-xs px-5 py-3 rounded-full bg-gold-bright text-void font-semibold text-center"
-          >
-            Register Now
-          </a>
         </div>
       )}
     </nav>

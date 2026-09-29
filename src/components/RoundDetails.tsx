@@ -2,7 +2,7 @@ import { ROUNDS, HACKATHON_JOURNEY } from "../data/hackathon";
 import type { RoundInfo } from "../data/hackathon";
 import SectionHeading from "./SectionHeading";
 
-// ─── Single Round Card ──────────────────────────────────────────────────────
+// ─── Single Round Card ───────────────────────────────────────────────────────
 function RoundCard({ round, accent }: { round: RoundInfo; accent: "gold" | "cyan" }) {
   const accentColor = accent === "gold" ? "text-gold-bright" : "text-cyan";
   const accentDim = accent === "gold" ? "text-gold-dim" : "text-cyan-dim";
@@ -128,29 +128,6 @@ function RoundCard({ round, accent }: { round: RoundInfo; accent: "gold" | "cyan
             </div>
           </div>
         )}
-
-        {/* Round 1 Abstract Submission CTA */}
-        {round.roundNumber === 1 && (
-          <div className="mt-8 flex justify-end">
-            <a
-              href="https://forms.gle/72RVgwhzMgoxYfs66"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative inline-flex items-center gap-2.5 label-caps text-[11px] md:text-xs px-7 py-3.5 rounded-full bg-gold-bright text-void font-semibold tracking-wider hover:shadow-[0_0_24px_rgba(212,175,55,0.4)] transition-all duration-300 hover:scale-[1.03]"
-            >
-              <span>Submit Abstract</span>
-              <svg
-                className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </a>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -228,7 +205,7 @@ function JourneyFlowchart() {
   );
 }
 
-// ─── Main Section ───────────────────────────────────────────────────────────
+// ─── Main Section ────────────────────────────────────────────────────────────
 export default function RoundDetails() {
   const round1 = ROUNDS[0];
   const round2 = ROUNDS[1];

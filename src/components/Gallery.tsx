@@ -30,16 +30,53 @@ const IMAGES_V2 = [
   "/images/2.0/20260315_101725.jpg",
 ];
 
+// ─── NeuraX 3.0 media (browser-compatible files only — HEIC excluded) ────────
+const IMAGES_V3 = [
+  "/N 3.0/IMG_20260919_102325.jpg.jpeg",
+  "/N 3.0/IMG_20260919_102410.jpg.jpeg",
+  "/N 3.0/IMG_5523.HEIC.jpg",
+  "/N 3.0/IMG_5535.HEIC.jpg",
+  "/N 3.0/IMG_5559.HEIC.jpg",
+  "/N 3.0/IMG_6812.JPG.jpeg",
+  "/N 3.0/IMG_6813.JPG.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.35.59 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.00 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.01 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.04 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.11 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.14 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.16 AM.jpeg",
+  "/N 3.0/WhatsApp Image 2026-09-28 at 11.36.22 AM.jpeg",
+];
+
+const VIDEOS_V3 = [
+  "/N 3.0/WhatsApp Video 2026-09-28 at 11.35.53 AM.mp4",
+  "/N 3.0/WhatsApp Video 2026-09-28 at 11.35.58 AM.mp4",
+];
+
 // ─── Gallery edition config ──────────────────────────────────────────────────
 type Edition = {
   number: string;
   name: string;
   images: string[];
+  videos?: string[];
   altPrefix: string;
   direction: "normal" | "reverse";
   siteUrl?: string;
-  comingSoon?: boolean;
 };
+
+// Combined media items for the marquee (images + videos interleaved)
+type MediaItem = { type: "image"; src: string } | { type: "video"; src: string };
+
+function buildMediaItems(images: string[], videos: string[] = []): MediaItem[] {
+  const items: MediaItem[] = images.map((src) => ({ type: "image", src }));
+  // Interleave videos roughly evenly
+  const step = Math.max(1, Math.floor(items.length / (videos.length + 1)));
+  videos.forEach((src, i) => {
+    items.splice(Math.min((i + 1) * step + i, items.length), 0, { type: "video", src });
+  });
+  return items;
+}
 
 const EDITIONS: Edition[] = [
   {
@@ -61,15 +98,16 @@ const EDITIONS: Edition[] = [
   {
     number: "03",
     name: "NeuraX 3.0",
-    images: [],
+    images: IMAGES_V3,
+    videos: VIDEOS_V3,
     altPrefix: "NeuraX 3.0",
     direction: "normal",
-    comingSoon: true,
   },
 ];
 
 export default function Gallery() {
   const [openImage, setOpenImage] = useState<string | null>(null);
+  const [openVideo, setOpenVideo] = useState<string | null>(null);
 
   return (
     <section id="gallery" className="relative py-28 md:py-36 bg-ink overflow-hidden">
@@ -82,36 +120,26 @@ export default function Gallery() {
       </div>
 
       <div className="flex flex-col gap-28">
-        {EDITIONS.map((edition) => (
-          <div key={edition.name} className="relative">
-            {/* Edition header */}
-            <div className="px-6 mb-8 flex items-center gap-5 max-w-7xl mx-auto">
-              <span className="font-display text-5xl md:text-6xl text-gold-dim/40 font-semibold leading-none select-none">
-                {edition.number}
-              </span>
-              <div className="h-px flex-1 bg-line" />
-              <span className="label-caps text-xs md:text-sm text-bone font-bold tracking-[0.22em]">
-                {edition.name}
-              </span>
-              <div className="h-px w-8 bg-line" />
-            </div>
-
-            {/* Images or Coming Soon */}
-            {edition.comingSoon ? (
-              <div className="max-w-7xl mx-auto px-6">
-                <div className="rounded-3xl border border-line/60 bg-charcoal/30 flex flex-col items-center justify-center py-20 gap-4">
-                  <span className="text-4xl">📸</span>
-                  <p className="label-caps text-sm text-gold-dim tracking-widest">
-                    Coming Soon
-                  </p>
-                  <p className="text-mist text-sm max-w-xs text-center">
-                    Photos from {edition.name} will appear here after the event.
-                  </p>
-                </div>
+        {EDITIONS.map((edition) => {
+          const mediaItems = buildMediaItems(edition.images, edition.videos);
+          // Quadruple the list for a seamless infinite marquee
+          const marqueeItems = [...mediaItems, ...mediaItems, ...mediaItems, ...mediaItems];
+          return (
+            <div key={edition.name} className="relative">
+              {/* Edition header */}
+              <div className="px-6 mb-8 flex items-center gap-5 max-w-7xl mx-auto">
+                <span className="font-display text-5xl md:text-6xl text-gold-dim/40 font-semibold leading-none select-none">
+                  {edition.number}
+                </span>
+                <div className="h-px flex-1 bg-line" />
+                <span className="label-caps text-xs md:text-sm text-bone font-bold tracking-[0.22em]">
+                  {edition.name}
+                </span>
+                <div className="h-px w-8 bg-line" />
               </div>
-            ) : (
+
+              {/* Marquee strip — hover-pause desktop only */}
               <>
-                {/* Marquee strip — hover-pause desktop only */}
                 <div className="relative overflow-hidden">
                   <div
                     className="flex w-max md:hover:[animation-play-state:paused]"
@@ -120,23 +148,48 @@ export default function Gallery() {
                       animationDirection: edition.direction === "reverse" ? "reverse" : "normal",
                     }}
                   >
-                    {[...edition.images, ...edition.images, ...edition.images, ...edition.images].map(
-                      (src, i) => (
+                    {marqueeItems.map((item, i) =>
+                      item.type === "image" ? (
                         <button
                           // eslint-disable-next-line react/no-array-index-key
-                          key={`${edition.name}-${i}`}
+                          key={`${edition.name}-img-${i}`}
                           type="button"
-                          onClick={() => setOpenImage(src)}
+                          onClick={() => setOpenImage(item.src)}
                           className="group relative flex-shrink-0 mx-3 overflow-hidden rounded-2xl border border-line md:hover:border-gold-dim transition-colors duration-300 touch-manipulation"
                           style={{ width: "280px", height: "200px" }}
                         >
                           <img
-                            src={src}
-                            alt={`${edition.altPrefix} — photo ${(i % edition.images.length) + 1}`}
+                            src={item.src}
+                            alt={`${edition.altPrefix} — photo ${(i % mediaItems.length) + 1}`}
                             className="h-full w-full object-cover md:group-hover:scale-105 transition-transform duration-500"
                             loading="lazy"
                           />
                           <div className="absolute inset-0 bg-void/20 md:group-hover:bg-transparent transition-colors duration-300" />
+                        </button>
+                      ) : (
+                        <button
+                          // eslint-disable-next-line react/no-array-index-key
+                          key={`${edition.name}-vid-${i}`}
+                          type="button"
+                          onClick={() => setOpenVideo(item.src)}
+                          className="group relative flex-shrink-0 mx-3 overflow-hidden rounded-2xl border border-line md:hover:border-gold-dim transition-colors duration-300 touch-manipulation"
+                          style={{ width: "340px", height: "200px" }}
+                        >
+                          <video
+                            src={item.src}
+                            className="h-full w-full object-cover"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          />
+                          {/* Play icon overlay */}
+                          <div className="absolute inset-0 flex items-center justify-center bg-void/40 md:group-hover:bg-void/20 transition-colors duration-300">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-full bg-gold-bright/20 border border-gold-bright/60 backdrop-blur-sm group-hover:scale-110 transition-transform duration-300">
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" className="text-gold-bright ml-1">
+                                <polygon points="5,3 19,12 5,21" />
+                              </svg>
+                            </div>
+                          </div>
                         </button>
                       )
                     )}
@@ -172,12 +225,12 @@ export default function Gallery() {
                   </div>
                 )}
               </>
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
 
-      {/* Lightbox */}
+      {/* Image Lightbox */}
       {openImage && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-void/90 backdrop-blur-md px-4 py-10 animate-fade-in"
@@ -195,6 +248,31 @@ export default function Gallery() {
             src={openImage}
             alt="Enlarged gallery view"
             className="max-h-[85vh] max-w-full rounded-xl shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
+      {/* Video Lightbox */}
+      {openVideo && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-void/90 backdrop-blur-md px-4 py-10 animate-fade-in"
+          onClick={() => setOpenVideo(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setOpenVideo(null)}
+            aria-label="Close"
+            className="absolute top-6 right-6 h-12 w-12 flex items-center justify-center rounded-full bg-charcoal/50 border border-line text-mist hover:text-bone hover:border-gold-dim transition-colors"
+          >
+            ✕
+          </button>
+          {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+          <video
+            src={openVideo}
+            className="max-h-[85vh] max-w-full rounded-xl shadow-2xl"
+            controls
+            autoPlay
             onClick={(e) => e.stopPropagation()}
           />
         </div>
